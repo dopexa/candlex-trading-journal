@@ -130,6 +130,8 @@ input#res-loss:checked + .seg-btn{background:var(--loss);border-color:var(--loss
 .auth-switch{color:var(--text-dim);font-size:13px;margin:16px 0 0;text-align:center}
 .auth-switch button,.text-button{border:0;background:none;padding:0;color:var(--brand-light);font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .auth-error{color:var(--loss);font-size:13px;margin-top:10px;min-height:18px}
+.auth-success{color:var(--profit);font-size:13px;margin-top:10px;min-height:18px}
+.auth-setup{color:var(--text-dim);font-size:13px;line-height:1.5;margin:0 0 18px;padding:12px;border:1px solid var(--border);border-left:3px solid var(--brand);border-radius:8px;background:var(--surface2)}
 .full-btn{width:100%;margin-top:16px}
 .field-help{color:var(--text-dim);font-size:12px;margin:6px 0 0}
 .inline-field{display:flex;align-items:center;gap:8px}
@@ -210,8 +212,11 @@ input#res-loss:checked + .seg-btn{background:var(--loss);border-color:var(--loss
 <div id="modalRoot"></div>
 <div id="toastRoot" class="toast-root"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./hosted-backend.js"></script>
 <script>
-// CandleX client: the server is the source of truth for every signed-in user's data.
+// CandleX client: Supabase is the source of truth when hosted auth is configured;
+// the standalone file keeps its existing private, browser-local offline journal.
 let S = { trades: [], settings: { currency: 'USD', theme: 'dark' }, accounts: [] };
 let user = null;
 let view = 'dashboard';
@@ -220,6 +225,9 @@ let calMonth = new Date(); calMonth.setDate(1);
 let chartRef = null;
 let authMode = 'login';
 let authError = '';
+let authMessage = '';
+let forceOfflineMode = false;
+const HOSTED_AUTH_UNCONFIGURED = location.hostname.endsWith('.github.io') && !window.CandleXHosted?.enabled;
 
 const EMOTIONS = ['Confident','Anxious','Excited','Fearful','Calm','Frustrated','Euphoric','Regretful','Focused','Impulsive'];
 const CURRENCIES = ['USD','EUR','GBP','JPY','CAD','AUD','INR'];
@@ -261,7 +269,7 @@ async function writeOfflineState(state){
   try{const db=await openOfflineDb();await new Promise((resolve,reject)=>{const tx=db.transaction('journal','readwrite');tx.objectStore('journal').put(state,'state');tx.oncomplete=resolve;tx.onerror=()=>reject(new Error('Could not save local journal'));});db.close();}
   catch(error){OFFLINE_LOCAL_STORAGE=true;try{localStorage.setItem(OFFLINE_DB,JSON.stringify(state));}catch(e){throw new Error('Browser storage is full or blocked. Remove large screenshots or use a browser that allows local storage.');}}
 }
-async function api(path,method='GET',body){
+async function offlineApi(path,method='GET',body){
   const route=new URL(path,location.href).pathname;
   if(route==='/api/session')return {user:{email:'Offline journal · this browser'}};
   const state=await readOfflineState();
@@ -284,6 +292,10 @@ async function api(path,method='GET',body){
   if(route.startsWith('/api/auth/'))return {user:{email:'Offline journal · this browser'}};
   throw new Error('This feature is not available in the offline file.');
 }
+async function api(path,method='GET',body){
+  if(window.CandleXHosted?.enabled&&!forceOfflineMode)return window.CandleXHosted.api(path,method,body);
+  return offlineApi(path,method,body);
+}
 function applyTheme(){document.documentElement.setAttribute('data-theme',S.settings.theme==='light'?'light':'dark');}
 async function persistSettings(){
   const saved=await api('/api/settings','PUT',{settings:S.settings,accounts:S.accounts});
@@ -295,9 +307,13 @@ async function loadUserData(){
   applyTheme();
 }
 async function initApp(){
+  if(HOSTED_AUTH_UNCONFIGURED&&!forceOfflineMode){user=null;render();return;}
   try{
-    const session=await api('/api/session');user=session.user;await loadUserData();
-  }catch(e){user={email:'Offline journal'};authError=e.message;}
+    const session=await api('/api/session');user=session.user;if(user)await loadUserData();
+  }catch(e){
+    authError=e.message;
+    if(!window.CandleXHosted?.enabled)user={email:'Offline journal'};
+  }
   render();
   if(authError)toast(authError,true);
 }
@@ -433,9 +449,12 @@ const PAGES={dashboard:renderDashboard,calendar:renderCalendar,journal:renderJou
 
 function renderAuth(){
   const registering=authMode==='register';
+  const setup=HOSTED_AUTH_UNCONFIGURED&&!forceOfflineMode,disabled=setup?'disabled':'';
   return `<section class="auth-card"><div class="auth-brand">CandleX</div><h1>${registering?'Create your account':'Welcome back'}</h1><p class="sub auth-intro">${registering?'Create a private journal account to save your trades and screenshots.':'Sign in to open your private trading journal.'}</p>
-  <form id="authForm"><label class="field-label" for="authEmail">Email</label><input class="input" id="authEmail" type="email" name="email" autocomplete="email" maxlength="254" required><label class="field-label" for="authPassword">Password</label><input class="input" id="authPassword" type="password" name="password" autocomplete="${registering?'new-password':'current-password'}" minlength="${registering?10:1}" maxlength="128" required>${registering?'<p class="field-help">Use at least 10 characters.</p>':''}<div class="auth-error" role="alert">${esc(authError)}</div><button class="btn btn-primary full-btn" type="submit">${registering?'Create account':'Sign in'}</button></form>
+  ${setup?'<div class="auth-setup" role="status">Account registration is being set up. Sign In and Sign Up will work when setup is complete.</div>':''}
+  <form id="authForm"><label class="field-label" for="authEmail">Email</label><input class="input" id="authEmail" type="email" name="email" autocomplete="email" maxlength="254" ${disabled} required><label class="field-label" for="authPassword">Password</label><input class="input" id="authPassword" type="password" name="password" autocomplete="${registering?'new-password':'current-password'}" minlength="${registering?10:1}" maxlength="128" ${disabled} required>${registering?'<p class="field-help">Use at least 10 characters.</p>':''}<div class="auth-error" role="alert">${esc(authError)}</div><div class="auth-success" role="status">${esc(authMessage)}</div><button class="btn btn-primary full-btn" type="submit" ${disabled}>${registering?'Create account':'Sign in'}</button></form>
   <p class="auth-switch">${registering?'Already have an account?':'New to CandleX?'} <button type="button" data-action="auth-mode">${registering?'Sign in':'Create an account'}</button></p>
+  ${setup?'<button type="button" class="btn btn-secondary full-btn" data-action="offline-mode">Open offline journal</button><p class="field-help" style="text-align:center">Offline entries stay in this browser and do not sync to an account.</p>':''}
   <a class="discord-link discord-auth" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord">${discordIcon()} Join CandleX on Discord</a></section>`;
 }
 
@@ -486,7 +505,7 @@ function renderApp(){document.getElementById('app').innerHTML=PAGES[view]();upda
 function render(){
   const app=document.getElementById('app'),accountBar=document.getElementById('accountBar'),modalRoot=document.getElementById('modalRoot');
   if(!user){document.body.classList.add('auth-only');accountBar.innerHTML='';modalRoot.innerHTML='';app.innerHTML=renderAuth();return;}
-  document.body.classList.remove('auth-only');accountBar.innerHTML='<span class="user-email">Offline journal · saved in this browser</span>'; 
+  document.body.classList.remove('auth-only');accountBar.innerHTML=window.CandleXHosted?.enabled?`<span class="user-email">${esc(user.email||'CandleX account')}</span><button class="btn btn-ghost" data-action="sign-out">Sign out</button>`:'<span class="user-email">Offline journal · saved in this browser</span>';
   renderApp();modalRoot.innerHTML=modal?renderModal():'';
   if(modal?.mode==='form')renderImagePreviews();
 }
@@ -536,15 +555,18 @@ async function addAccount(name,selectInForm){
 }
 
 async function handleAuthSubmit(form){
-  authError='';const data=Object.fromEntries(new FormData(form).entries());
+  if(HOSTED_AUTH_UNCONFIGURED&&!forceOfflineMode){authError='Hosted account setup is not complete yet.';render();return;}
+  authError='';authMessage='';const mode=authMode,data=Object.fromEntries(new FormData(form).entries());
   try{
-    const result=await api(authMode==='register'?'/api/auth/register':'/api/auth/login','POST',data);
-    user=result.user;await loadUserData();view='dashboard';modal=null;render();toast(authMode==='register'?'Account created.':'Signed in.');
+    const result=await api(mode==='register'?'/api/auth/register':'/api/auth/login','POST',data);
+    if(mode==='register'&&result.pendingConfirmation){authMode='login';authMessage='Check your email and confirm your account, then sign in.';render();return;}
+    if(!result.user)throw new Error('CandleX did not return an account. Please try again.');
+    user=result.user;await loadUserData();view='dashboard';modal=null;authMode='login';render();toast(mode==='register'?'Account created.':'Signed in.');
   }catch(e){authError=e.message;render();document.getElementById('authEmail')?.focus();}
 }
 async function signOut(){
   try{await api('/api/auth/logout','POST',{});}catch(e){}
-  user=null;S={trades:[],settings:{currency:'USD',theme:'dark'},accounts:[]};modal=null;authMode='login';authError='';render();
+  user=null;S={trades:[],settings:{currency:'USD',theme:'dark'},accounts:[]};modal=null;authMode='login';authError='';authMessage='';render();
 }
 function showImage(image,returnModal){modal={mode:'image',image,returnModal};render();}
 
@@ -555,7 +577,8 @@ document.addEventListener('click',async e=>{
   if((el.classList.contains('modal-backdrop')||el.classList.contains('image-backdrop'))&&e.target.closest('[data-stop]'))return;
   const a=el.dataset.action;
   if(a==='nav'){view=el.dataset.view;modal=null;render();}
-  else if(a==='auth-mode'){authMode=authMode==='login'?'register':'login';authError='';render();}
+  else if(a==='auth-mode'){authMode=authMode==='login'?'register':'login';authError='';authMessage='';render();}
+  else if(a==='offline-mode'){forceOfflineMode=true;user={email:'Offline journal · this browser'};await loadUserData();render();}
   else if(a==='sign-out'){await signOut();}
   else if(a==='add-trade'){openForm(todayStr(),null,'direct');}
   else if(a==='add-trade-day'){openForm(el.dataset.date,null,'day');}
