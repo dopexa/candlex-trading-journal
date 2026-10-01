@@ -5,8 +5,8 @@
  */
 (() => {
   const config = {
-    url: '',
-    publishableKey: ''
+    url: 'https://rbiornjsvaxydzieoxpy.supabase.co',
+    publishableKey: 'sb_publishable_OcCjiEzK1f4bBwefgbNhRQ_ok0q_-Yk'
   };
   const enabled = Boolean(config.url && config.publishableKey && window.supabase?.createClient);
   const bucket = 'trade-screenshots';
