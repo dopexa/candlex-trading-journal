@@ -635,13 +635,15 @@ function riskResultHtml(){
   const validPrices=Number.isFinite(entry)&&entry>0&&Number.isFinite(stop)&&stop>0&&distance>0&&correctStop&&Number.isFinite(pointValue)&&pointValue>0;
   const perUnit=validPrices?distance*pointValue:0,units=hasBudget&&validPrices&&perUnit>0?allowed/perUnit:null;
   const validTarget=Number.isFinite(target)&&target>0&&(riskDraft.direction==='long'?target>entry:target<entry),reward=units!==null&&validTarget?units*Math.abs(target-entry)*pointValue:null,rr=validPrices&&validTarget?Math.abs(target-entry)/distance:null;
+  const wrongStop=entry>0&&stop>0&&distance>0&&!correctStop;
   let message='Enter account balance, entry, and stop prices to calculate an estimated position size.';
   if(limit>0&&remaining<=0)message=`Daily loss limit reached: ${fmtMoney(todayLoss)} realized loss today against a ${fmtMoney(limit)} limit. Pause and review before taking another trade.`;
   else if(limit>0&&budget>remaining)message=`Daily limit leaves ${fmtMoney(remaining)} of room today, so the calculator caps risk below your ${riskPercent||0}% balance setting.`;
-  else if(entry>0&&stop>0&&distance>0&&!correctStop)message=`For a ${riskDraft.direction} trade, place the stop on the opposite side of entry.`;
+  else if(wrongStop)message=`For a ${riskDraft.direction} trade, place the stop on the opposite side of entry.`;
+  else if(Number.isFinite(riskPercent)&&riskPercent>100)message='Risk per trade must be 100% or less.';
   else if(rr===null&&riskDraft.target)message=`For a ${riskDraft.direction} trade, enter the target beyond entry in the trade direction.`;
   else if(hasBudget&&validPrices)message='Sizing is an estimate. Check your broker’s contract, pip, and minimum-lot rules before placing an order.';
-  const alertClass=(limit>0&&remaining<=0)||!correctStop?'risk-alert':'risk-note';
+  const alertClass=(limit>0&&remaining<=0)||wrongStop?'risk-alert':'risk-note';
   return `<div class="risk-output" aria-live="polite">
     <div class="risk-metric"><div class="risk-metric-label">Max risk for trade</div><div class="risk-metric-value">${hasBudget?fmtMoney(allowed):'—'}</div></div>
     <div class="risk-metric"><div class="risk-metric-label">Estimated position</div><div class="risk-metric-value">${units===null?'—':new Intl.NumberFormat('en-US',{maximumFractionDigits:3}).format(units)} units</div></div>
