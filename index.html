@@ -6,7 +6,7 @@
 <title>CandleX — Trading Journal</title>
 <script>document.documentElement.setAttribute('data-theme','dark');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 :root{
@@ -15,6 +15,7 @@
   --text:#E9ECF5;--text-dim:#9AA6BC;--brand:#9333EA;--brand-light:#C084FC;
   --profit:#22C08C;--loss:#F0575F;
   --font:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --display:'Space Grotesk','IBM Plex Sans',system-ui,sans-serif;
   --mono:'IBM Plex Mono','SFMono-Regular',Menlo,monospace;
 }
 :root[data-theme="light"]{
@@ -175,8 +176,151 @@ input#res-loss:checked + .seg-btn{background:var(--loss);border-color:var(--loss
 @media(max-width:520px){.account-bar{padding:8px 12px}.account-bar .user-email{max-width:150px}.content{padding:16px 12px 90px}.modal-body{padding:14px}.modal-foot{padding:12px 14px}.detail-grid{grid-template-columns:1fr 1fr}.trade-row{padding:9px}.trade-side{gap:2px}.trade-amt{font-size:13px}}
 @media(max-width:380px){.detail-grid{grid-template-columns:1fr}.modal-foot .btn{padding:9px 10px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* CandleX dimensional finish: layered surfaces, ambient light, and restrained depth. */
+:root{
+  --bg:#080D1B;--surface:#10182C;--surface2:#17223B;--border:rgba(160,177,215,.17);
+  --text:#F0F2FA;--text-dim:#A2AEC5;--brand:#9B4DFF;--brand-light:#D3A7FF;
+  --depth-shadow:0 22px 55px rgba(0,0,0,.3),0 3px 10px rgba(0,0,0,.22);
+}
+:root[data-theme="light"]{
+  --bg:#F1F0F8;--surface:#FBFAFF;--surface2:#F0EDF8;--border:rgba(74,56,111,.14);
+  --text:#211B30;--text-dim:#716A83;--brand:#812BDE;--brand-light:#7424C9;
+  --depth-shadow:0 20px 46px rgba(59,40,94,.12),0 3px 10px rgba(59,40,94,.07);
+}
+html{background:var(--bg)}
+body{
+  background:
+    radial-gradient(ellipse at 76% 2%,rgba(118,50,210,.18),transparent 33rem),
+    radial-gradient(ellipse at 8% 44%,rgba(39,102,177,.10),transparent 30rem),var(--bg);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;
+  background-image:linear-gradient(rgba(182,197,231,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(182,197,231,.14) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 82%);
+}
+:root[data-theme="light"] body::before{opacity:.2;background-image:linear-gradient(rgba(94,70,145,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(94,70,145,.09) 1px,transparent 1px)}
+.shell{min-height:100svh;position:relative}
+.sidebar{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:linear-gradient(180deg,rgba(18,27,49,.97),rgba(11,17,33,.98));
+  border-right-color:rgba(174,145,235,.14);box-shadow:12px 0 38px rgba(0,0,0,.14)
+}
+.sidebar::before{content:"";position:absolute;z-index:-1;left:-105px;top:85px;width:260px;height:260px;border-radius:50%;background:rgba(127,54,225,.14);filter:blur(70px);pointer-events:none}
+:root[data-theme="light"] .sidebar{background:linear-gradient(180deg,#F7F4FF,#EBE8F4);box-shadow:10px 0 34px rgba(50,35,82,.08)}
+.sidebar .brand{letter-spacing:-.055em;text-shadow:0 0 26px rgba(179,110,255,.35)}
+.nav-btn{transition:transform .22s ease,background .22s ease,color .22s ease,box-shadow .22s ease}
+.nav-btn:hover{transform:translateX(3px)}
+.nav-btn.active{background:linear-gradient(105deg,rgba(151,75,255,.2),rgba(151,75,255,.055));box-shadow:inset 2px 0 0 var(--brand-light),inset 0 1px rgba(255,255,255,.07)}
+.main{position:relative;min-height:100svh}
+.topbar,.account-bar{background:rgba(13,20,37,.74);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-color:rgba(166,181,218,.13)}
+:root[data-theme="light"] .topbar,:root[data-theme="light"] .account-bar{background:rgba(250,248,255,.78);border-color:rgba(74,56,111,.11)}
+.topbar{position:sticky;top:0;z-index:18}
+.topbar .brand{letter-spacing:-.055em;text-shadow:0 0 25px rgba(179,110,255,.3)}
+.content{max-width:1180px;padding-top:34px;padding-bottom:58px}
+.page-head{align-items:center;margin-bottom:24px}
+h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04em;font-weight:600;text-shadow:0 2px 24px rgba(138,97,207,.15)}
+.sub{line-height:1.55}
+.btn{border-radius:10px;font-weight:600;transition:transform .2s ease,box-shadow .2s ease,filter .2s ease,border-color .2s ease}
+.btn-primary{background:linear-gradient(135deg,#B05DFF 0%,#842FF0 52%,#6924D0 100%);box-shadow:0 8px 22px rgba(126,42,217,.3),inset 0 1px rgba(255,255,255,.3),inset 0 -2px rgba(38,8,82,.18)}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 13px 28px rgba(126,42,217,.39),inset 0 1px rgba(255,255,255,.34)}
+.btn-secondary,.btn-ghost{box-shadow:inset 0 1px rgba(255,255,255,.045),0 3px 9px rgba(0,0,0,.1)}
+.btn-secondary:hover,.btn-ghost:hover{transform:translateY(-1px);border-color:rgba(193,150,255,.4)}
+.hero-card{
+  position:relative;isolation:isolate;overflow:hidden;min-height:206px;display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(116deg,#171C39 0%,#26204C 51%,#271645 100%);
+  border:1px solid rgba(208,177,255,.23);border-radius:20px;padding:30px 34px;margin-bottom:20px;
+  box-shadow:0 28px 68px rgba(31,13,68,.36),inset 0 1px rgba(255,255,255,.17),inset 0 -1px rgba(0,0,0,.24);
+  transform-style:preserve-3d;transition:transform .35s ease,box-shadow .35s ease
+}
+.hero-card::before{
+  content:"";position:absolute;z-index:-1;right:-25px;top:50%;width:330px;height:250px;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(169,94,255,.33),rgba(113,54,200,.14) 48%,transparent 71%);
+  transform:translateY(-50%) rotate(-18deg);filter:blur(3px)
+}
+.hero-card::after{
+  content:"";position:absolute;z-index:-1;right:12%;top:50%;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle at 29% 23%,#F1DFFF 0 1.8%,#D4A5FF 4%,#9A4BEA 22%,#5D2AAF 54%,#27164D 75%,rgba(24,13,48,.2) 77%,transparent 79%);
+  box-shadow:inset -12px -14px 24px rgba(10,6,33,.62),inset 5px 5px 13px rgba(255,255,255,.42),0 18px 35px rgba(7,5,27,.47),0 0 38px rgba(171,103,255,.32);
+  transform:translateY(-50%) rotateX(16deg) rotateY(-19deg);animation:orb-float 7s ease-in-out infinite
+}
+.hero-card:hover{transform:perspective(1100px) rotateX(1.2deg) rotateY(-1deg) translateY(-2px);box-shadow:0 34px 76px rgba(31,13,68,.42),inset 0 1px rgba(255,255,255,.2)}
+.hero-card>*{position:relative;z-index:1;transform:translateZ(18px)}
+.hero-label{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#C2B6DA;margin-bottom:8px}
+.hero-value{font-family:var(--display);font-size:clamp(38px,5vw,52px);line-height:1.08;letter-spacing:-.045em;text-shadow:0 4px 24px rgba(8,4,22,.28)}
+.tiles{gap:14px;perspective:1100px}
+.tile{
+  position:relative;isolation:isolate;overflow:hidden;min-height:116px;padding:18px 18px 16px;
+  border:1px solid rgba(165,183,221,.14);border-left:1px solid rgba(165,183,221,.14);border-radius:15px;
+  background:linear-gradient(145deg,rgba(26,38,66,.97),rgba(16,24,43,.97));
+  box-shadow:var(--depth-shadow),inset 0 1px rgba(255,255,255,.085);
+  transform:translateZ(0);transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease
+}
+.tile::before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 100% 0,rgba(156,88,255,.18),transparent 52%);pointer-events:none}
+.tile:nth-child(2)::before{background:radial-gradient(ellipse at 100% 0,rgba(34,192,140,.16),transparent 52%)}
+.tile:nth-child(3)::before{background:radial-gradient(ellipse at 100% 0,rgba(240,87,95,.14),transparent 52%)}
+:root[data-theme="light"] .tile{background:linear-gradient(145deg,#FFFFFF,#F2EFF9);border-color:rgba(91,69,133,.12)}
+@media(hover:hover){.tile:hover{transform:perspective(800px) rotateX(2deg) rotateY(-2deg) translateY(-4px);border-color:rgba(191,146,255,.38);box-shadow:0 28px 52px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.13)}}
+.tile-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)}
+.tile-value{font-family:var(--display);font-size:25px;letter-spacing:-.035em;margin-top:12px;text-shadow:0 2px 18px rgba(159,77,255,.12)}
+.empty{
+  position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;
+  min-height:310px;padding:30px 24px;border-style:solid;border-radius:20px;
+  background:radial-gradient(ellipse at 50% 8%,rgba(136,69,225,.16),transparent 48%),linear-gradient(145deg,rgba(20,30,53,.96),rgba(13,20,37,.98));
+  box-shadow:var(--depth-shadow),inset 0 1px rgba(255,255,255,.075)
+}
+.empty::before{content:"";width:62px;height:62px;flex:none;margin:2px 0 19px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#F4E7FF 0 1%,#CE9DFF 6%,#9342E8 25%,#532494 65%,#21133E 84%);box-shadow:inset -8px -9px 14px rgba(10,5,30,.64),inset 4px 4px 9px rgba(255,255,255,.43),0 12px 25px rgba(0,0,0,.36),0 0 35px rgba(150,78,240,.22);transform:perspective(220px) rotateX(12deg) rotateY(-15deg)}
+.empty::after{content:"";position:absolute;z-index:-1;top:34px;left:calc(50% + 27px);width:25px;height:25px;border:1px solid rgba(216,182,255,.4);border-radius:7px;transform:rotate(35deg) skew(-5deg,-5deg);box-shadow:0 0 20px rgba(152,93,237,.25)}
+:root[data-theme="light"] .empty{background:radial-gradient(ellipse at 50% 8%,rgba(137,75,211,.12),transparent 48%),linear-gradient(145deg,#FFFFFF,#F3EFFB)}
+.empty-title{font-size:19px;letter-spacing:-.025em}
+.empty-body{line-height:1.65}
+.cal-nav{padding:10px 12px;margin:0 0 12px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(145deg,rgba(24,35,60,.82),rgba(15,23,41,.84));box-shadow:inset 0 1px rgba(255,255,255,.06),0 9px 22px rgba(0,0,0,.12)}
+:root[data-theme="light"] .cal-nav{background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(241,237,249,.95))}
+.cal-month{font-size:15px;letter-spacing:.015em}
+.cal-grid{gap:8px;perspective:1200px}
+.cal-cell{position:relative;border-color:rgba(159,177,215,.15);border-radius:11px;padding:8px;background:linear-gradient(145deg,rgba(24,35,58,.95),rgba(15,23,41,.98));box-shadow:inset 0 1px rgba(255,255,255,.055),0 5px 11px rgba(0,0,0,.12);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+:root[data-theme="light"] .cal-cell{background:linear-gradient(145deg,#FFFFFF,#F1EEF8);border-color:rgba(91,69,133,.13)}
+@media(hover:hover){.cal-cell:not(.cal-empty):hover{transform:perspective(700px) rotateX(3deg) rotateY(-2deg) translateY(-3px);box-shadow:0 13px 25px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.1)}}
+.cal-cell.is-today{border-color:var(--brand);box-shadow:inset 0 0 0 1px rgba(175,108,255,.38),0 0 22px rgba(148,69,235,.2)}
+.cal-daynum{font-weight:600}
+.trade-row,.card{
+  position:relative;border-color:rgba(158,177,217,.15);border-radius:14px;
+  background:linear-gradient(145deg,rgba(20,30,51,.96),rgba(14,21,38,.98));
+  box-shadow:0 10px 26px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.06);
+  transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease
+}
+:root[data-theme="light"] .trade-row,:root[data-theme="light"] .card{background:linear-gradient(145deg,#FFFFFF,#F6F3FB);border-color:rgba(91,69,133,.13);box-shadow:0 10px 25px rgba(59,40,94,.08),inset 0 1px rgba(255,255,255,.9)}
+@media(hover:hover){.trade-row:hover,.card:hover{transform:translateY(-2px);border-color:rgba(174,128,247,.28);box-shadow:0 16px 30px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.09)}}
+.trade-open{padding:2px;border-radius:8px}
+.badge{box-shadow:inset 0 1px rgba(255,255,255,.09)}
+.row-thumb,.image-preview{border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.12)}
+.row-thumb{transition:transform .2s ease,box-shadow .2s ease}
+.row-thumb:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 9px 18px rgba(0,0,0,.32)}
+.account-chip,.tag-chip,.emotion-chip{box-shadow:inset 0 1px rgba(255,255,255,.07),0 3px 8px rgba(0,0,0,.08)}
+.emotion-chip{transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.emotion-chip:hover{transform:translateY(-2px);border-color:rgba(189,140,255,.46)}
+.input,.tag-entry,.upload-zone{box-shadow:inset 0 2px 6px rgba(0,0,0,.13),0 1px rgba(255,255,255,.035)}
+.input:focus,.tag-entry:focus-within{outline:none;border-color:rgba(183,131,255,.75);box-shadow:0 0 0 3px rgba(153,79,245,.16),inset 0 1px 4px rgba(0,0,0,.12)}
+.modal-backdrop{background:rgba(3,6,14,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.modal{border-color:rgba(183,155,229,.24);border-radius:19px;background:linear-gradient(150deg,#18233C,#10182B 65%);box-shadow:0 34px 90px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.1);animation:modal-rise .24s cubic-bezier(.2,.8,.2,1) both}
+:root[data-theme="light"] .modal{background:linear-gradient(150deg,#FFFFFF,#F5F1FB);box-shadow:0 34px 90px rgba(42,27,73,.23),inset 0 1px #fff}
+.modal-head{background:rgba(18,27,47,.92);backdrop-filter:blur(14px);border-color:var(--border)}
+:root[data-theme="light"] .modal-head{background:rgba(251,249,255,.94)}
+.auth-card{position:relative;isolation:isolate;overflow:hidden;border-color:rgba(188,152,243,.23);border-radius:21px;background:linear-gradient(145deg,rgba(22,32,55,.98),rgba(12,19,35,.99));box-shadow:0 34px 90px rgba(0,0,0,.46),inset 0 1px rgba(255,255,255,.1)}
+.auth-card::before{content:"";position:absolute;z-index:-1;right:-90px;top:-115px;width:245px;height:245px;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(212,167,255,.8),rgba(139,64,227,.3) 20%,rgba(110,51,191,.08) 56%,transparent 72%);filter:blur(2px)}
+:root[data-theme="light"] .auth-card{background:linear-gradient(145deg,#FFFFFF,#F4F0FA);box-shadow:0 34px 90px rgba(42,27,73,.2),inset 0 1px #fff}
+.auth-brand{letter-spacing:-.055em;text-shadow:0 0 25px rgba(172,100,255,.33)}
+.site-footer{color:var(--text-dim)}
+.nav-btn:focus-visible,.tab-btn:focus-visible,.icon-btn:focus-visible,.btn:focus-visible,.cal-cell:focus-visible,.emotion-chip:focus-visible{outline:2px solid var(--brand-light);outline-offset:3px}
+@keyframes orb-float{0%,100%{transform:translateY(-50%) rotateX(16deg) rotateY(-19deg)}50%{transform:translateY(calc(-50% - 7px)) rotateX(19deg) rotateY(-15deg)}}
+@keyframes modal-rise{from{opacity:0;transform:perspective(900px) translateY(14px) rotateX(2deg)}to{opacity:1;transform:perspective(900px) translateY(0) rotateX(0)}}
+@media(max-width:860px){.content{padding-top:25px}.hero-card{min-height:188px}.hero-card::after{right:8%;width:118px;height:118px}}
+@media(max-width:520px){.content{padding-top:21px}.page-head{margin-bottom:19px}.hero-card{min-height:164px;padding:24px 22px;border-radius:17px}.hero-card::after{right:5%;width:82px;height:82px;opacity:.78}.hero-value{font-size:36px}.tile{min-height:102px;padding:14px}.tile-value{font-size:21px;margin-top:9px}.cal-grid{gap:5px}.cal-cell{border-radius:8px;padding:5px}.cal-dow{font-size:10px}.cal-pl{font-size:9px}.cal-count{font-size:8px}.trade-row,.card{border-radius:12px}.sidebar{box-shadow:none}}
+@media(max-width:380px){.hero-card::after{right:2%;width:66px;height:66px;opacity:.58}.hero-label{font-size:11px}.hero-value{font-size:31px}.tile-label{font-size:10px}.tile-value{font-size:19px}}
+@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
-<meta name="description" content="Offline CandleX trading journal. Trades and screenshots are saved locally in this browser.">
+<meta name="description" content="CandleX private trading journal for trade reviews, performance tracking, and screenshots.">
 </head>
 <body>
 <div class="shell">
@@ -213,7 +357,7 @@ input#res-loss:checked + .seg-btn{background:var(--loss);border-color:var(--loss
 <div id="toastRoot" class="toast-root"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./hosted-backend.js?v=d055953"></script>
+<script src="./hosted-backend.js?v=design-20261002"></script>
 <script>
 // CandleX client: Supabase is the source of truth when hosted auth is configured;
 // the standalone file keeps its existing private, browser-local offline journal.
