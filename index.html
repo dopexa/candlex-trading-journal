@@ -318,6 +318,40 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
 @media(max-width:860px){.content{padding-top:25px}.hero-card{min-height:188px}.hero-card::after{right:8%;width:118px;height:118px}}
 @media(max-width:520px){.content{padding-top:21px}.page-head{margin-bottom:19px}.hero-card{min-height:164px;padding:24px 22px;border-radius:17px}.hero-card::after{right:5%;width:82px;height:82px;opacity:.78}.hero-value{font-size:36px}.tile{min-height:102px;padding:14px}.tile-value{font-size:21px;margin-top:9px}.cal-grid{gap:5px}.cal-cell{border-radius:8px;padding:5px}.cal-dow{font-size:10px}.cal-pl{font-size:9px}.cal-count{font-size:8px}.trade-row,.card{border-radius:12px}.sidebar{box-shadow:none}}
 @media(max-width:380px){.hero-card::after{right:2%;width:66px;height:66px;opacity:.58}.hero-label{font-size:11px}.hero-value{font-size:31px}.tile-label{font-size:10px}.tile-value{font-size:19px}}
+/* 3D risk and review tools */
+.brand-credit{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:auto;padding:18px 20px 22px;color:var(--text-dim);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.brand-credit strong{font:600 11px var(--display);letter-spacing:.12em;background:linear-gradient(110deg,#F0DFFF,#C995FF 48%,#8F4ADE);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 20px rgba(159,77,255,.18)}
+.brand-credit i{color:var(--brand-light);font-style:normal;opacity:.75}
+.stats-stack{display:grid;gap:16px}
+.risk-card{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 100% 0,rgba(157,81,247,.18),transparent 37%),linear-gradient(145deg,rgba(25,34,61,.98),rgba(13,20,37,.99));border-color:rgba(184,145,245,.22);box-shadow:0 22px 54px rgba(0,0,0,.26),inset 0 1px rgba(255,255,255,.1)}
+.risk-card::after{content:"";position:absolute;z-index:-1;right:34px;top:22px;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 28% 24%,#F2E5FF 0 2%,#C98EFF 8%,#7438C7 35%,#24143F 76%);box-shadow:inset -8px -9px 14px rgba(0,0,0,.54),inset 4px 4px 8px rgba(255,255,255,.35),0 13px 28px rgba(0,0,0,.35),0 0 28px rgba(147,68,232,.22);pointer-events:none}
+.tool-title{font:600 20px var(--display);letter-spacing:-.035em;margin:0 0 5px}
+.tool-sub{color:var(--text-dim);font-size:13px;line-height:1.55;margin:0 0 16px;max-width:680px}
+.risk-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px;max-width:760px}
+.risk-direction{max-width:760px}
+.risk-output{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+.risk-metric{position:relative;overflow:hidden;border:1px solid rgba(170,150,216,.17);border-radius:12px;padding:13px 14px;background:linear-gradient(145deg,rgba(33,43,72,.8),rgba(18,27,47,.9));box-shadow:inset 0 1px rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.16)}
+.risk-metric-label{color:var(--text-dim);font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.risk-metric-value{font:600 18px var(--display);margin-top:7px;overflow-wrap:anywhere}
+.risk-alert{margin-top:12px;padding:10px 12px;border:1px solid rgba(242,87,95,.28);border-radius:10px;background:rgba(240,87,95,.09);color:#FF9EA3;font-size:13px;line-height:1.5}
+.risk-note{margin:10px 0 0;color:var(--text-dim);font-size:11px;line-height:1.5}
+.week-card{background:radial-gradient(ellipse at 100% 0,rgba(82,96,175,.13),transparent 42%),linear-gradient(145deg,rgba(20,30,53,.98),rgba(13,20,37,.99));box-shadow:var(--depth-shadow),inset 0 1px rgba(255,255,255,.075)}
+.week-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.week-range{color:var(--text-dim);font-size:12px}
+.goal-progress-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 18px}
+.goal-progress{border:1px solid rgba(166,181,218,.13);border-radius:12px;padding:12px;background:rgba(9,15,29,.32);box-shadow:inset 0 1px rgba(255,255,255,.045)}
+.goal-progress-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);margin-bottom:9px}
+.goal-progress-head strong{color:var(--text);font-size:11px;font-weight:600}
+.progress-track{height:7px;border-radius:999px;background:rgba(141,152,184,.18);overflow:hidden;box-shadow:inset 0 2px 3px rgba(0,0,0,.25)}
+.progress-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#7A35D3,#B766FF,#DFB4FF);box-shadow:0 0 14px rgba(169,95,255,.4);transition:width .3s ease}
+.review-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.review-fields .field-label{margin-top:0}
+.review-save{display:flex;justify-content:flex-end;margin-top:12px}
+.setting-goals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
+.chart-wrap.chart-3d{position:relative;padding:14px 14px 8px;border-radius:16px;background:linear-gradient(145deg,rgba(23,33,58,.86),rgba(12,19,35,.92));box-shadow:inset 0 1px rgba(255,255,255,.075),0 18px 35px rgba(0,0,0,.2);border:1px solid rgba(166,181,218,.14)}
+@media(hover:hover){.risk-card,.week-card,.chart-3d{transition:transform .25s ease,box-shadow .25s ease}.risk-card:hover,.week-card:hover,.chart-3d:hover{transform:perspective(1200px) rotateX(.65deg) translateY(-2px);box-shadow:0 28px 60px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.11)}}
+@media(max-width:720px){.risk-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.risk-output{grid-template-columns:repeat(2,minmax(0,1fr))}.review-fields{grid-template-columns:1fr}.setting-goals{grid-template-columns:1fr}.brand-credit{padding-bottom:88px}}
+@media(max-width:440px){.risk-card::after{right:14px;top:14px;width:48px;height:48px;opacity:.75}.risk-card{padding:14px}.risk-fields{grid-template-columns:1fr 1fr;gap:0 8px}.risk-fields .wide-mobile{grid-column:1/-1}.goal-progress-list{grid-template-columns:1fr}.risk-metric{padding:11px}.risk-metric-value{font-size:16px}.week-card{padding:14px}}
 @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 <meta name="description" content="CandleX private trading journal for trade reviews, performance tracking, and screenshots.">
@@ -344,6 +378,7 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
     <header class="topbar"><div class="brand">CandleX</div><div class="topbar-tools"><a class="discord-link" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.73 5.09a19.28 19.28 0 0 0-4.76-1.47.07.07 0 0 0-.08.04c-.2.35-.43.82-.59 1.19a17.78 17.78 0 0 0-5.3 0c-.16-.38-.4-.84-.6-1.19a.08.08 0 0 0-.08-.04 19.23 19.23 0 0 0-4.76 1.47.07.07 0 0 0-.03.03C.51 9.54-.32 13.86.1 18.13a.08.08 0 0 0 .03.05 19.42 19.42 0 0 0 5.84 2.95.08.08 0 0 0 .09-.03c.45-.62.85-1.28 1.19-1.98a.08.08 0 0 0-.04-.1 12.8 12.8 0 0 1-1.82-.87.08.08 0 0 1-.01-.13l.37-.29a.07.07 0 0 1 .08-.01c3.83 1.75 7.98 1.75 11.76 0a.07.07 0 0 1 .08.01l.37.29a.08.08 0 0 1-.01.13c-.58.34-1.19.63-1.82.87a.08.08 0 0 0-.04.1c.35.7.75 1.36 1.19 1.98a.08.08 0 0 0 .09.03 19.36 19.36 0 0 0 5.85-2.95.08.08 0 0 0 .03-.05c.5-4.94-.84-9.23-3.55-13.01a.06.06 0 0 0-.03-.03ZM8.02 14.86c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Zm7.96 0c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Z"/></svg></a></div></header>
     <div id="accountBar" class="account-bar"></div>
     <main id="app" class="content"></main>
+    <footer class="brand-credit" aria-label="Created by AIVAZA and TIGHTFICE"><span>by</span><strong>AIVAZA</strong><i>&amp;</i><strong>TIGHTFICE</strong></footer>
   </div>
   <nav class="tabbar">
     <button class="tab-btn" data-action="nav" data-view="dashboard">Dashboard</button>
@@ -357,11 +392,14 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
 <div id="toastRoot" class="toast-root"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./hosted-backend.js?v=design-20261002"></script>
+<script src="./hosted-backend.js?v=risk-review-20261002"></script>
 <script>
 // CandleX client: Supabase is the source of truth when hosted auth is configured;
 // the standalone file keeps its existing private, browser-local offline journal.
-let S = { trades: [], settings: { currency: 'USD', theme: 'dark' }, accounts: [] };
+const DEFAULT_GOALS={weeklyProfitTarget:0,weeklyTradeTarget:0,dailyLossLimit:0};
+function defaultSettings(){return {currency:'USD',theme:'dark',goals:{...DEFAULT_GOALS},weeklyReviews:{}};}
+function normalizeSettings(value){const next=Object.assign(defaultSettings(),value||{});next.goals=Object.assign({...DEFAULT_GOALS},value?.goals||{});next.weeklyReviews=value?.weeklyReviews&&typeof value.weeklyReviews==='object'&&!Array.isArray(value.weeklyReviews)?value.weeklyReviews:{};return next;}
+let S = { trades: [], settings: defaultSettings(), accounts: [] };
 let user = null;
 let view = 'dashboard';
 let modal = null;
@@ -371,6 +409,7 @@ let authMode = 'login';
 let authError = '';
 let authMessage = '';
 let forceOfflineMode = false;
+let riskDraft={balance:'',riskPercent:'1',entry:'',stop:'',target:'',pointValue:'1',direction:'long'};
 const HOSTED_AUTH_UNCONFIGURED = location.hostname.endsWith('.github.io') && !window.CandleXHosted?.enabled;
 
 const EMOTIONS = ['Confident','Anxious','Excited','Fearful','Calm','Frustrated','Euphoric','Regretful','Focused','Impulsive'];
@@ -380,6 +419,10 @@ function pad(n){ return n<10 ? '0'+n : ''+n; }
 function dstr(y,m0,d){ return y+'-'+pad(m0+1)+'-'+pad(d); }
 function monthKey(y,m0){ return y+'-'+pad(m0+1); }
 function todayStr(){ const t=new Date(); return dstr(t.getFullYear(),t.getMonth(),t.getDate()); }
+function weekStartDate(date=new Date()){const d=new Date(date);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d;}
+function weekKey(date=new Date()){const d=weekStartDate(date);return dstr(d.getFullYear(),d.getMonth(),d.getDate());}
+function weekTrades(){const key=weekKey(),today=todayStr();return S.trades.filter(t=>t.date>=key&&t.date<=today);}
+function weekLabel(){const start=weekStartDate(),end=new Date(start);end.setDate(start.getDate()+6);return `${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;}
 function tradesInMonth(y,m0){ const k=monthKey(y,m0); return S.trades.filter(t=>t.date.slice(0,7)===k); }
 function tradesOnDay(ds){ return S.trades.filter(t=>t.date===ds); }
 function signed(t){ return t.result==='profit' ? Math.abs(Number(t.amount)) : -Math.abs(Number(t.amount)); }
@@ -402,7 +445,7 @@ function buildCalendarDays(y,m0){
 
 const OFFLINE_DB='candlex-offline-v1';
 let OFFLINE_LOCAL_STORAGE=false;
-function emptyOfflineState(){return {trades:[],settings:{currency:'USD',theme:'dark'},accounts:[]};}
+function emptyOfflineState(){return {trades:[],settings:defaultSettings(),accounts:[]};}
 function openOfflineDb(){return new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('IndexedDB unavailable'));return;}const req=indexedDB.open(OFFLINE_DB,1);req.onupgradeneeded=()=>req.result.createObjectStore('journal');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(new Error('IndexedDB unavailable'));});}
 async function readOfflineState(){
   try{const db=await openOfflineDb();return await new Promise((resolve,reject)=>{const tx=db.transaction('journal','readonly'),req=tx.objectStore('journal').get('state');req.onsuccess=()=>resolve(req.result||emptyOfflineState());req.onerror=()=>reject(new Error('Could not read local journal'));tx.oncomplete=()=>db.close();tx.onerror=()=>{db.close();reject(new Error('Could not read local journal'));};});}
@@ -445,9 +488,21 @@ async function persistSettings(){
   const saved=await api('/api/settings','PUT',{settings:S.settings,accounts:S.accounts});
   S.settings=saved.settings;S.accounts=saved.accounts;applyTheme();
 }
+async function saveGoals(form){
+  const dailyLossLimit=Number(form.querySelector('#goalDailyLoss').value),weeklyProfitTarget=Number(form.querySelector('#goalWeeklyProfit').value),weeklyTradeTarget=Number(form.querySelector('#goalWeeklyTrades').value);
+  if(!Number.isFinite(dailyLossLimit)||dailyLossLimit<0||dailyLossLimit>1e9||!Number.isFinite(weeklyProfitTarget)||weeklyProfitTarget<0||weeklyProfitTarget>1e9||!Number.isInteger(weeklyTradeTarget)||weeklyTradeTarget<0||weeklyTradeTarget>10000){toast('Enter valid non-negative goals within the shown limits.',true);return;}
+  const old=S.settings.goals;S.settings.goals={dailyLossLimit,weeklyProfitTarget,weeklyTradeTarget};
+  try{await persistSettings();render();toast('Risk limits and goals saved.');}catch(e){S.settings.goals=old;toast(e.message,true);}
+}
+async function saveWeeklyReview(form){
+  const key=weekKey(),old=S.settings.weeklyReviews||{},reviews={...old,[key]:{wins:form.querySelector('#reviewWins').value.trim(),improve:form.querySelector('#reviewImprove').value.trim(),focus:form.querySelector('#reviewFocus').value.trim()}};
+  Object.keys(reviews).sort().slice(0,Math.max(0,Object.keys(reviews).length-52)).forEach(k=>delete reviews[k]);
+  S.settings.weeklyReviews=reviews;
+  try{await persistSettings();render();toast('Weekly review saved to your journal.');}catch(e){S.settings.weeklyReviews=old;toast(e.message,true);}
+}
 async function loadUserData(){
   const data=await api('/api/data');
-  S={trades:Array.isArray(data.trades)?data.trades:[],settings:Object.assign({currency:'USD',theme:'dark'},data.settings||{}),accounts:Array.isArray(data.accounts)?data.accounts:[]};
+  S={trades:Array.isArray(data.trades)?data.trades:[],settings:normalizeSettings(data.settings),accounts:Array.isArray(data.accounts)?data.accounts:[]};
   applyTheme();
 }
 async function initApp(){
@@ -566,24 +621,79 @@ function renderJournal(){
   }
   return `<div class="page-head"><div><h1>Trade Journal</h1><p class="sub">${esc(monthLabel)} · <span class="${plClass(total)}">${fmtSigned(total)}</span></p></div><button class="btn btn-primary" data-action="add-trade">+ Add trade</button></div><div class="cal-nav"><button class="btn btn-ghost" data-action="cal-prev">‹ Prev</button><div class="cal-month">${esc(monthLabel)}</div><button class="btn btn-ghost" data-action="cal-next">Next ›</button></div>${body}`;
 }
+function dailyLossAmount(){return S.trades.filter(t=>t.date===todayStr()).reduce((sum,t)=>sum+Math.max(0,-signed(t)),0);}
+function goalProgress(label,current,target,format){
+  if(!(target>0))return `<div class="goal-progress"><div class="goal-progress-head"><span>${esc(label)}</span><button class="text-button" type="button" data-action="nav" data-view="settings">Set goal</button></div><p class="field-help">Add a target in Settings to track progress.</p></div>`;
+  const percent=Math.max(0,Math.min(100,current/target*100));
+  return `<div class="goal-progress"><div class="goal-progress-head"><span>${esc(label)}</span><strong>${format(current)} / ${format(target)}</strong></div><div class="progress-track" role="progressbar" aria-label="${esc(label)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percent)}"><div class="progress-fill" style="width:${percent}%"></div></div></div>`;
+}
+function riskResultHtml(){
+  const balance=Number(riskDraft.balance),riskPercent=Number(riskDraft.riskPercent),entry=Number(riskDraft.entry),stop=Number(riskDraft.stop),target=Number(riskDraft.target),pointValue=Number(riskDraft.pointValue);
+  const hasBudget=Number.isFinite(balance)&&balance>0&&Number.isFinite(riskPercent)&&riskPercent>0&&riskPercent<=100;
+  const budget=hasBudget?balance*riskPercent/100:0,limit=Number(S.settings.goals?.dailyLossLimit)||0,todayLoss=dailyLossAmount(),remaining=limit>0?Math.max(0,limit-todayLoss):null;
+  const allowed=limit>0?Math.min(budget,remaining):budget,distance=Math.abs(entry-stop),correctStop=riskDraft.direction==='long'?stop<entry:stop>entry;
+  const validPrices=Number.isFinite(entry)&&entry>0&&Number.isFinite(stop)&&stop>0&&distance>0&&correctStop&&Number.isFinite(pointValue)&&pointValue>0;
+  const perUnit=validPrices?distance*pointValue:0,units=hasBudget&&validPrices&&perUnit>0?allowed/perUnit:null;
+  const validTarget=Number.isFinite(target)&&target>0&&(riskDraft.direction==='long'?target>entry:target<entry),reward=units!==null&&validTarget?units*Math.abs(target-entry)*pointValue:null,rr=validPrices&&validTarget?Math.abs(target-entry)/distance:null;
+  let message='Enter account balance, entry, and stop prices to calculate an estimated position size.';
+  if(limit>0&&remaining<=0)message=`Daily loss limit reached: ${fmtMoney(todayLoss)} realized loss today against a ${fmtMoney(limit)} limit. Pause and review before taking another trade.`;
+  else if(limit>0&&budget>remaining)message=`Daily limit leaves ${fmtMoney(remaining)} of room today, so the calculator caps risk below your ${riskPercent||0}% balance setting.`;
+  else if(entry>0&&stop>0&&distance>0&&!correctStop)message=`For a ${riskDraft.direction} trade, place the stop on the opposite side of entry.`;
+  else if(rr===null&&riskDraft.target)message=`For a ${riskDraft.direction} trade, enter the target beyond entry in the trade direction.`;
+  else if(hasBudget&&validPrices)message='Sizing is an estimate. Check your broker’s contract, pip, and minimum-lot rules before placing an order.';
+  const alertClass=(limit>0&&remaining<=0)||!correctStop?'risk-alert':'risk-note';
+  return `<div class="risk-output" aria-live="polite">
+    <div class="risk-metric"><div class="risk-metric-label">Max risk for trade</div><div class="risk-metric-value">${hasBudget?fmtMoney(allowed):'—'}</div></div>
+    <div class="risk-metric"><div class="risk-metric-label">Estimated position</div><div class="risk-metric-value">${units===null?'—':new Intl.NumberFormat('en-US',{maximumFractionDigits:3}).format(units)} units</div></div>
+    <div class="risk-metric"><div class="risk-metric-label">Target reward</div><div class="risk-metric-value">${reward===null?'—':fmtMoney(reward)}</div></div>
+    <div class="risk-metric"><div class="risk-metric-label">Risk / reward</div><div class="risk-metric-value">${rr===null?'—':`1 : ${rr.toFixed(2)}`}</div></div>
+  </div><div class="${alertClass}" role="status">${esc(message)}</div>`;
+}
+function renderRiskCalculator(){
+  const d=riskDraft,limit=Number(S.settings.goals?.dailyLossLimit)||0,loss=dailyLossAmount();
+  return `<section class="card risk-card"><div class="tool-title">Risk calculator</div><p class="tool-sub">Plan your position size before a trade. The daily loss limit uses today’s logged losses and caps the remaining risk budget.</p>
+    <div class="risk-fields">
+      <div><label class="field-label" for="riskBalance">Account balance (${esc(S.settings.currency||'USD')})</label><input class="input" id="riskBalance" type="number" inputmode="decimal" min="0.01" step="any" placeholder="e.g. 10000" value="${esc(d.balance)}"></div>
+      <div><label class="field-label" for="riskPercent">Risk per trade (%)</label><input class="input" id="riskPercent" type="number" inputmode="decimal" min="0.01" max="100" step="any" value="${esc(d.riskPercent)}"></div>
+      <div><label class="field-label" for="riskDirection">Direction</label><select class="input" id="riskDirection"><option value="long" ${d.direction==='long'?'selected':''}>Long</option><option value="short" ${d.direction==='short'?'selected':''}>Short</option></select></div>
+      <div><label class="field-label" for="riskEntry">Entry price</label><input class="input" id="riskEntry" type="number" inputmode="decimal" min="0.00000001" step="any" placeholder="Entry" value="${esc(d.entry)}"></div>
+      <div><label class="field-label" for="riskStop">Stop price</label><input class="input" id="riskStop" type="number" inputmode="decimal" min="0.00000001" step="any" placeholder="Stop" value="${esc(d.stop)}"></div>
+      <div><label class="field-label" for="riskTarget">Target price (optional)</label><input class="input" id="riskTarget" type="number" inputmode="decimal" min="0.00000001" step="any" placeholder="Target" value="${esc(d.target)}"></div>
+      <div class="wide-mobile"><label class="field-label" for="riskPointValue">Value per 1.0 price move / unit</label><input class="input" id="riskPointValue" type="number" inputmode="decimal" min="0.00000001" step="any" value="${esc(d.pointValue)}"></div>
+    </div><div id="riskResult">${riskResultHtml()}</div><p class="risk-note">Today’s logged loss: <strong>${fmtMoney(loss)}</strong>${limit>0?` · Daily limit: <strong>${fmtMoney(limit)}</strong> · Remaining: <strong>${fmtMoney(Math.max(0,limit-loss))}</strong>`:' · Set a daily loss limit in Settings to enable its warning.'}</p>
+  </section>`;
+}
+function renderWeeklyReview(){
+  const trades=weekTrades(),pnl=sumSigned(trades),wins=trades.filter(t=>t.result==='profit').length,winRate=trades.length?Math.round(wins/trades.length*100):0;
+  const emotionCounts={};trades.forEach(t=>(t.emotions||[]).forEach(e=>emotionCounts[e]=(emotionCounts[e]||0)+1));
+  const frequentEmotion=Object.keys(emotionCounts).sort((a,b)=>emotionCounts[b]-emotionCounts[a]||a.localeCompare(b))[0]||'—';
+  const goals=S.settings.goals||DEFAULT_GOALS,review=S.settings.weeklyReviews?.[weekKey()]||{};
+  return `<section class="card week-card"><div class="week-head"><div><div class="tool-title">Weekly review</div><div class="week-range">${esc(weekLabel())} · ${trades.length} logged trade${trades.length===1?'':'s'}</div></div><button class="btn btn-ghost" type="button" data-action="nav" data-view="settings">Edit goals</button></div>
+    <div class="tiles">${statTile('This week P/L',fmtSigned(pnl),plClass(pnl))}${statTile('Win rate',winRate+'%')}${statTile('Average / trade',trades.length?fmtSigned(pnl/trades.length):fmtMoney(0),plClass(pnl))}${statTile('Most logged emotion',esc(frequentEmotion))}</div>
+    <div class="goal-progress-list">${goalProgress('Weekly profit',Math.max(0,pnl),Number(goals.weeklyProfitTarget)||0,fmtMoney)}${goalProgress('Weekly trades',trades.length,Number(goals.weeklyTradeTarget)||0,n=>`${n}`)}</div>
+    <form id="weeklyReviewForm"><div class="review-fields"><div><label class="field-label" for="reviewWins">What went well?</label><textarea class="input" id="reviewWins" name="wins" maxlength="2000" rows="3" placeholder="Record a decision or habit worth repeating.">${esc(review.wins||'')}</textarea></div><div><label class="field-label" for="reviewImprove">What can improve?</label><textarea class="input" id="reviewImprove" name="improve" maxlength="2000" rows="3" placeholder="Note one thing to handle differently.">${esc(review.improve||'')}</textarea></div><div><label class="field-label" for="reviewFocus">Focus for next week</label><textarea class="input" id="reviewFocus" name="focus" maxlength="2000" rows="3" placeholder="Choose one practical focus.">${esc(review.focus||'')}</textarea></div></div><div class="review-save"><button class="btn btn-primary" type="submit">Save weekly review</button></div></form>
+  </section>`;
+}
 function renderStats(){
-  const list=S.trades;
-  if(!list.length)return `<div class="page-head"><div><h1>Statistics</h1><p class="sub">All-time performance</p></div></div>${emptyState('No stats yet','Your performance charts and summaries will appear once you log a trade.',false)}`;
-  const total=sumSigned(list),wins=list.filter(t=>t.result==='profit').length,losses=list.length-wins,wr=Math.round(wins/list.length*100);
-  return `<div class="page-head"><div><h1>Statistics</h1><p class="sub">All-time performance</p></div></div><div class="tiles">${statTile('Total P/L',fmtSigned(total),plClass(total))}${statTile('Win rate',wr+'%')}${statTile('Winning trades',wins,'profit')}${statTile('Losing trades',losses,'loss')}${statTile('Total trades',list.length)}</div><div class="card"><div class="tile-label">Cumulative P/L over time</div><div class="chart-wrap"><canvas id="equityChart"></canvas></div></div>`;
+  const list=S.trades,total=sumSigned(list),wins=list.filter(t=>t.result==='profit').length,losses=list.length-wins,wr=list.length?Math.round(wins/list.length*100):0;
+  return `<div class="page-head"><div><h1>Statistics &amp; risk</h1><p class="sub">Performance, weekly goals, and pre-trade sizing</p></div></div><div class="stats-stack">
+    <section><div class="tiles">${statTile('Total P/L',fmtSigned(total),plClass(total))}${statTile('Win rate',wr+'%')}${statTile('Winning trades',wins,'profit')}${statTile('Losing trades',losses,'loss')}${statTile('Total trades',list.length)}</div><div class="card chart-3d"><div class="tile-label">Cumulative P/L over time</div>${list.length?'<div class="chart-wrap"><canvas id="equityChart" aria-label="Cumulative profit and loss chart"></canvas></div>':'<p class="sub" style="margin-top:12px">Your equity curve will appear when you log your first trade.</p>'}</div></section>
+    ${renderRiskCalculator()}${renderWeeklyReview()}</div>`;
 }
 function renderChart(){
   const canvas=document.getElementById('equityChart');if(!canvas||!window.Chart)return;
   const sorted=S.trades.slice().sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));let running=0;
   const labels=sorted.map(t=>t.date),data=sorted.map(t=>running+=signed(t)),css=getComputedStyle(document.documentElement),dim=css.getPropertyValue('--text-dim').trim(),brand=css.getPropertyValue('--brand').trim(),border=css.getPropertyValue('--border').trim();
+  const ctx=canvas.getContext('2d'),fill=ctx.createLinearGradient(0,0,0,260);fill.addColorStop(0,'rgba(161,83,255,.30)');fill.addColorStop(1,'rgba(115,53,190,0)');
   if(chartRef)chartRef.destroy();
-  chartRef=new Chart(canvas.getContext('2d'),{type:'line',data:{labels,datasets:[{label:'Cumulative P/L',data,borderColor:brand,backgroundColor:'transparent',tension:.25,pointRadius:2,pointHoverRadius:4,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:dim,maxTicksLimit:6,callback:function(val){const lbl=this.getLabelForValue(val);return new Date(lbl+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}},grid:{color:border}},y:{ticks:{color:dim,callback:v=>fmtMoney(v)},grid:{color:border}}}}});
+  chartRef=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Cumulative P/L',data,borderColor:brand,backgroundColor:fill,fill:true,tension:.28,pointRadius:sorted.length>24?0:2.5,pointHoverRadius:5,pointBackgroundColor:'#D7B0FF',pointBorderColor:'#7733CF',pointBorderWidth:1.5,borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(15,20,39,.96)',borderColor:'rgba(185,144,248,.35)',borderWidth:1,titleColor:'#EDE2FF',bodyColor:'#F4F1FA',padding:12,displayColors:false,callbacks:{label:context=>fmtSigned(Number(context.parsed.y)||0)}}},scales:{x:{ticks:{color:dim,maxTicksLimit:6,callback:function(val){const lbl=this.getLabelForValue(val);return new Date(lbl+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}},grid:{color:border}},y:{ticks:{color:dim,callback:v=>fmtMoney(v)},grid:{color:border}}}}});
 }
 function discordIcon(){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.73 5.09a19.28 19.28 0 0 0-4.76-1.47.07.07 0 0 0-.08.04c-.2.35-.43.82-.59 1.19a17.78 17.78 0 0 0-5.3 0c-.16-.38-.4-.84-.6-1.19a.08.08 0 0 0-.08-.04 19.23 19.23 0 0 0-4.76 1.47.07.07 0 0 0-.03.03C.51 9.54-.32 13.86.1 18.13a.08.08 0 0 0 .03.05 19.42 19.42 0 0 0 5.84 2.95.08.08 0 0 0 .09-.03c.45-.62.85-1.28 1.19-1.98a.08.08 0 0 0-.04-.1 12.8 12.8 0 0 1-1.82-.87.08.08 0 0 1-.01-.13l.37-.29a.07.07 0 0 1 .08-.01c3.83 1.75 7.98 1.75 11.76 0a.07.07 0 0 1 .08.01l.37.29a.08.08 0 0 1-.01.13c-.58.34-1.19.63-1.82.87a.08.08 0 0 0-.04.1c.35.7.75 1.36 1.19 1.98a.08.08 0 0 0 .09.03 19.36 19.36 0 0 0 5.85-2.95.08.08 0 0 0 .03-.05c.5-4.94-.84-9.23-3.55-13.01a.06.06 0 0 0-.03-.03ZM8.02 14.86c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Zm7.96 0c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Z"/></svg>`;}
 function renderSettings(){
   const cur=S.settings.currency||'USD',theme=S.settings.theme||'dark';
   return `<div class="page-head"><div><h1>Settings</h1><p class="sub">Preferences and trading accounts for CandleX</p></div></div>
   <div class="card"><label class="field-label">Currency</label><select class="input" id="currencySelect">${CURRENCIES.map(c=>`<option value="${c}" ${c===cur?'selected':''}>${c}</option>`).join('')}</select></div>
+  <form class="card" id="goalsForm"><div class="tool-title">Risk limits &amp; weekly goals</div><p class="tool-sub">Save personal limits to your journal. Leave a value at zero to turn that goal off.</p><div class="setting-goals"><div><label class="field-label" for="goalDailyLoss">Daily loss limit (${esc(cur)})</label><input class="input" id="goalDailyLoss" type="number" min="0" max="1000000000" step="any" value="${esc(S.settings.goals?.dailyLossLimit||0)}" required></div><div><label class="field-label" for="goalWeeklyProfit">Weekly profit target (${esc(cur)})</label><input class="input" id="goalWeeklyProfit" type="number" min="0" max="1000000000" step="any" value="${esc(S.settings.goals?.weeklyProfitTarget||0)}" required></div><div><label class="field-label" for="goalWeeklyTrades">Weekly trade target</label><input class="input" id="goalWeeklyTrades" type="number" min="0" max="10000" step="1" value="${esc(S.settings.goals?.weeklyTradeTarget||0)}" required></div></div><div class="review-save"><button class="btn btn-primary" type="submit">Save limits &amp; goals</button></div></form>
   <div class="card"><label class="field-label">Theme</label><div class="seg"><button type="button" class="seg-btn ${theme==='dark'?'active':''}" data-action="set-theme" data-theme="dark">Dark</button><button type="button" class="seg-btn ${theme==='light'?'active':''}" data-action="set-theme" data-theme="light">Light</button></div></div>
   <div class="card"><label class="field-label">Trading accounts</label><p class="sub">Trading account labels are saved with this browser’s local journal.</p><form id="accountForm" class="inline-field" style="margin-top:12px"><input class="input" id="accountName" maxlength="80" placeholder="Add a trading account" aria-label="New trading account name" required><button class="btn btn-secondary" type="submit">Add account</button></form><div class="account-list">${S.accounts.map((a,i)=>`<span class="account-chip">${esc(a)}<button type="button" data-action="remove-account" data-index="${i}" aria-label="Remove ${esc(a)}">×</button></span>`).join('')||'<span class="field-help">No trading accounts yet.</span>'}</div></div>
   <div class="card"><label class="field-label">Export</label><p class="sub" style="margin-bottom:10px">Download all your trades and notes as a CSV file.</p><button type="button" class="btn btn-secondary" data-action="export-csv">Export CSV</button></div>`;
@@ -710,7 +820,7 @@ async function handleAuthSubmit(form){
 }
 async function signOut(){
   try{await api('/api/auth/logout','POST',{});}catch(e){}
-  user=null;S={trades:[],settings:{currency:'USD',theme:'dark'},accounts:[]};modal=null;authMode='login';authError='';authMessage='';render();
+  user=null;S={trades:[],settings:defaultSettings(),accounts:[]};modal=null;authMode='login';authError='';authMessage='';render();
 }
 function showImage(image,returnModal){modal={mode:'image',image,returnModal};render();}
 
@@ -763,7 +873,9 @@ document.addEventListener('click',async e=>{
 });
 
 document.addEventListener('change',async e=>{
-  if(e.target.id==='currencySelect'){
+  if(e.target.id==='riskDirection'){
+    riskDraft.direction=e.target.value;const holder=document.getElementById('riskResult');if(holder)holder.innerHTML=riskResultHtml();
+  }else if(e.target.id==='currencySelect'){
     const old=S.settings.currency;S.settings.currency=e.target.value;try{await persistSettings();render();}catch(err){S.settings.currency=old;toast(err.message,true);}
   }else if(e.target.id==='screenshotInput'){
     await addImageFiles(e.target.files);e.target.value='';
@@ -773,6 +885,13 @@ document.addEventListener('submit',async e=>{
   if(e.target.id==='authForm'){e.preventDefault();await handleAuthSubmit(e.target);}
   else if(e.target.id==='tradeForm'){e.preventDefault();await handleTradeFormSubmit(e.target);}
   else if(e.target.id==='accountForm'){e.preventDefault();await addAccount(document.getElementById('accountName').value,false);}
+  else if(e.target.id==='goalsForm'){e.preventDefault();await saveGoals(e.target);}
+  else if(e.target.id==='weeklyReviewForm'){e.preventDefault();await saveWeeklyReview(e.target);}
+});
+document.addEventListener('input',e=>{
+  const map={riskBalance:'balance',riskPercent:'riskPercent',riskEntry:'entry',riskStop:'stop',riskTarget:'target',riskPointValue:'pointValue'};
+  const field=map[e.target.id];if(!field)return;
+  riskDraft[field]=e.target.value;const holder=document.getElementById('riskResult');if(holder)holder.innerHTML=riskResultHtml();
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.id==='tagInput'){e.preventDefault();addTag(e.target.value);e.target.value='';}

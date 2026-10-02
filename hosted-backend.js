@@ -75,6 +75,28 @@
     const settings = body?.settings || {};
     if (!currencies.includes(settings.currency || 'USD')) throw new Error('Choose a supported currency.');
     if (!['dark','light'].includes(settings.theme || 'dark')) throw new Error('Choose a supported theme.');
+    const sourceGoals = settings.goals || {};
+    const dailyLossLimit = Number(sourceGoals.dailyLossLimit || 0);
+    const weeklyProfitTarget = Number(sourceGoals.weeklyProfitTarget || 0);
+    const weeklyTradeTarget = Number(sourceGoals.weeklyTradeTarget || 0);
+    if (!Number.isFinite(dailyLossLimit) || dailyLossLimit < 0 || dailyLossLimit > 1e9 || !Number.isFinite(weeklyProfitTarget) || weeklyProfitTarget < 0 || weeklyProfitTarget > 1e9 || !Number.isInteger(weeklyTradeTarget) || weeklyTradeTarget < 0 || weeklyTradeTarget > 10000) {
+      throw new Error('Risk limits and weekly goals must be valid non-negative numbers.');
+    }
+    const sourceReviews = settings.weeklyReviews || {};
+    if (!sourceReviews || typeof sourceReviews !== 'object' || Array.isArray(sourceReviews)) throw new Error('Weekly review data is not valid.');
+    const reviewKeys = Object.keys(sourceReviews).sort().slice(-52);
+    const weeklyReviews = {};
+    for (const key of reviewKeys) {
+      const review = sourceReviews[key];
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(key) || !review || typeof review !== 'object' || Array.isArray(review)) throw new Error('Weekly review data is not valid.');
+      const normalized = {};
+      for (const field of ['wins','improve','focus']) {
+        const text = review[field] || '';
+        if (typeof text !== 'string' || text.length > 2000) throw new Error('Each weekly review note must be 2,000 characters or fewer.');
+        normalized[field] = text.trim();
+      }
+      weeklyReviews[key] = normalized;
+    }
     if (!Array.isArray(body?.accounts || [])) throw new Error('Trading accounts are not valid.');
     const accounts = [];
     for (const value of (body.accounts || [])) {
@@ -83,7 +105,7 @@
       if (!accounts.some(item => item.toLowerCase() === label.toLowerCase())) accounts.push(label);
     }
     if (accounts.length > 100) throw new Error('You can save up to 100 trading accounts.');
-    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark' }, accounts };
+    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
   }
 
   function normalizeTrade(value) {
