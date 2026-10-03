@@ -382,6 +382,8 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
 .deal-discount{font:700 22px var(--display);color:var(--profit);margin:13px 0 4px}
 .deal-code{font:600 13px var(--mono);letter-spacing:.04em;color:var(--text);padding:9px 11px;border:1px dashed rgba(184,145,245,.35);border-radius:9px;background:rgba(8,14,28,.25)}
 .deal-offer-item+.deal-offer-item{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.deal-source-link{display:inline-block;margin-top:-6px;margin-bottom:12px;color:var(--brand-light);font-size:12px;font-weight:600;text-decoration:none}
+.deal-source-link:hover{text-decoration:underline}
 .deals-notice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin-bottom:16px;border-color:rgba(184,145,245,.2);background:linear-gradient(120deg,rgba(109,57,173,.12),rgba(19,29,50,.75))}
 .deals-notice-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:10px;background:rgba(151,75,255,.18);color:var(--brand-light);font-weight:700}
 .deals-notice p{margin:0;color:var(--text-dim);font-size:13px;line-height:1.55}
@@ -799,27 +801,33 @@ function renderSettings(){
 }
 
 const PROP_FIRMS=[
-  {id:'lucid',name:'Lucid Trading',mark:'LT',type:'Futures prop firm',url:'https://lucidtrading.com/',offerUrl:'https://lucidtrading.com/',note:'Check Lucid’s official page for current offers. Some promo codes may be limited to the person they were issued to.'},
-  {id:'tradeify',name:'Tradeify',mark:'TF',type:'Futures prop firm',url:'https://tradeify.co/',offerUrl:'https://tradeify.co/',note:'Tradeify’s official page is the source for current promotional codes and their expiry dates.'},
-  {id:'apex',name:'Apex Trader Funding',mark:'APX',type:'Futures prop firm',url:'https://apextraderfunding.com/',offerUrl:'https://apextraderfunding.com/coupon-code/',note:'Check Apex’s official coupon page and confirm the discount at checkout.'}
+  {id:'lucid',name:'Lucid Trading',mark:'LT',type:'Futures prop firm',url:'https://lucidtrading.com/',offerUrl:'https://lucidtrading.com/',note:'Lucid’s terms prohibit publicly sharing its promo codes and the discounts attached to them. Check the official site or your own account for offers issued to you.'},
+  {id:'tradeify',name:'Tradeify',mark:'TF',type:'Futures prop firm',url:'https://tradeify.co/',offerUrl:'https://tradeify.co/',note:'No public code or end date is listed with the 35% offer. Confirm eligible plans and the final total at Tradeify checkout.'},
+  {id:'apex',name:'Apex Trader Funding',mark:'APX',type:'Futures prop firm',url:'https://apextraderfunding.com/',offerUrl:'https://apextraderfunding.com/help-center/billing/coupon-codes/',note:'Apex’s official coupon page is temporarily under maintenance. Check its Help Center and confirm the discount at checkout.'}
 ];
 function safeExternalUrl(value){try{const url=new URL(value);return url.protocol==='https:'?url.href:'#';}catch(error){return '#';}}
 function activePublicDeals(feed,firmId){
   const now=Date.now(),maxAge=72*60*60*1000;
   return (Array.isArray(feed?.offers)?feed.offers:[]).filter(offer=>{
-    if(offer?.firmId!==firmId||offer.publiclyShareable!==true||!offer.expiresAt||!offer.verifiedAt)return false;
-    const expires=Date.parse(offer.expiresAt),verified=Date.parse(offer.verifiedAt),starts=offer.startsAt?Date.parse(offer.startsAt):-Infinity;
-    return Number.isFinite(expires)&&Number.isFinite(verified)&&(offer.startsAt==null||Number.isFinite(starts))&&expires>now&&starts<=now&&verified<=now&&now-verified<=maxAge;
+    if(offer?.firmId!==firmId||offer.publiclyShareable!==true||!offer.verifiedAt)return false;
+    const expires=offer.expiresAt?Date.parse(offer.expiresAt):Infinity,verified=Date.parse(offer.verifiedAt),starts=offer.startsAt?Date.parse(offer.startsAt):-Infinity;
+    return Number.isFinite(verified)&&(offer.expiresAt==null||Number.isFinite(expires))&&(offer.startsAt==null||Number.isFinite(starts))&&expires>now&&starts<=now&&verified<=now&&now-verified<=maxAge;
   });
 }
 function renderDealCard(firm,feed){
   const offers=activePublicDeals(feed,firm.id),officialUrl=safeExternalUrl(firm.offerUrl);
-  const status=offers.length?`${offers.length} verified offer${offers.length===1?'':'s'}`:'No verified public offer listed';
-  const offerDetails=offers.length?offers.map(offer=>`<div class="deal-offer-item">${offer.discount?`<div class="deal-discount">${esc(offer.discount)}</div>`:''}${offer.code?`<div class="deal-code">Code: ${esc(offer.code)}</div>`:''}${offer.description?`<p class="deal-note">${esc(offer.description)}</p>`:''}<p class="deal-note">${offer.startsAt?`Valid ${new Date(offer.startsAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})} – `:''}through ${new Date(offer.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}. Check eligible account types and final price at checkout.</p></div>`).join(''):`<p class="deal-note">${esc(firm.note)}</p>`;
+  const needsConfirm=offers.some(offer=>offer.confirmBeforePurchase===true);
+  const status=offers.length?(needsConfirm?'Official listing · confirm availability':`${offers.length} verified offer${offers.length===1?'':'s'}`):'No verified public offer listed';
+  const offerDetails=offers.length?offers.map(offer=>{
+    const expiry=offer.expiresAt?`Ends ${new Date(offer.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}.`:'End date not listed by the firm.';
+    const verified=new Date(offer.verifiedAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+    const sourceUrl=offer.sourceUrl?safeExternalUrl(offer.sourceUrl):officialUrl;
+    return `<div class="deal-offer-item">${offer.discount?`<div class="deal-discount">${esc(offer.discount)}</div>`:''}${offer.code?`<div class="deal-code">Code: ${esc(offer.code)}</div>`:`<div class="deal-code">No public code listed</div>`}${offer.description?`<p class="deal-note">${esc(offer.description)}</p>`:''}<p class="deal-note">${offer.startsAt?`Valid from ${new Date(offer.startsAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}. `:''}${expiry} Checked ${verified}. Confirm eligible plans and the final price at checkout.</p><a class="deal-source-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener noreferrer">Official source ↗</a></div>`;
+  }).join(''):`<p class="deal-note">${esc(firm.note)}</p>`;
   return `<article class="card deal-card"><div class="deal-card-head"><span class="deal-mark" aria-hidden="true">${esc(firm.mark)}</span><div><div class="deal-name">${esc(firm.name)}</div><div class="deal-type">${esc(firm.type)}</div></div></div><div class="deal-status"><span class="deal-dot" aria-hidden="true"></span><span>${status}</span></div>${offerDetails}<a class="btn btn-secondary deal-link" href="${esc(officialUrl)}" target="_blank" rel="noopener noreferrer">View official offers <span aria-hidden="true">↗</span></a></article>`;
 }
 function renderDeals(isPublic=false){
-  return `${isPublic?'<button type="button" class="btn btn-ghost deals-back" data-action="nav" data-view="auth">← Back to sign in</button>':''}<div class="deals-page"><div class="page-head"><div><h1>Prop firm deals</h1><p class="sub">Official offers from the firms you follow</p></div><span class="badge badge-long">3 firms tracked</span></div><div class="card deals-notice"><span class="deals-notice-icon" aria-hidden="true">✓</span><p>Only current, publicly shareable offers verified within the last 72 hours appear as deals. Always confirm the code, eligible account, and final price on the firm’s checkout page.</p></div><div id="propDealsContent" class="deals-grid" aria-live="polite"><div class="deals-empty">Loading official offer status…</div></div><p class="deals-source-note">Offers are not recommendations to buy an account. Each firm controls its own prices, promotion rules, and expiry dates. CandleX links to the official pages so you can confirm the latest details.</p></div>`;
+  return `${isPublic?'<button type="button" class="btn btn-ghost deals-back" data-action="nav" data-view="auth">← Back to sign in</button>':''}<div class="deals-page"><div class="page-head"><div><h1>Prop firm deals</h1><p class="sub">Discount, code, restrictions, and last checked date from official sources</p></div><span class="badge badge-long">3 firms tracked</span></div><div class="card deals-notice"><span class="deals-notice-icon" aria-hidden="true">✓</span><p>Public offers verified within the last 72 hours appear here. We show the end date and code only when the firm publishes them. Always confirm eligible plans and final checkout price.</p></div><div id="propDealsContent" class="deals-grid" aria-live="polite"><div class="deals-empty">Loading official offer status…</div></div><p class="deals-source-note">Offers are not recommendations to buy an account. Each firm controls its own prices and rules. Promo codes can be restricted to certain account types or customers; confirm terms on the official source before paying.</p></div>`;
 }
 async function loadPropFirmDeals(){
   const board=document.getElementById('propDealsContent');if(!board)return;

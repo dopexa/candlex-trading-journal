@@ -1,4 +1,23 @@
 {
   "schemaVersion": 1,
-  "offers": []
+  "offers": [
+    {
+      "firmId": "tradeify",
+      "discount": "35% off",
+      "verifiedAt": "2026-10-03T21:32:00Z",
+      "publiclyShareable": true,
+      "sourceUrl": "https://tradeify.co/",
+      "description": "Tradeify's official homepage advertises 35% off funded accounts. It also shows an August code banner that has expired; no public code or end date is shown beside the 35% offer. Confirm eligible plans and the final price at checkout."
+    },
+    {
+      "firmId": "apex",
+      "discount": "Up to 90% off evaluation accounts",
+      "code": "SAVENOW",
+      "verifiedAt": "2026-10-03T21:32:00Z",
+      "publiclyShareable": true,
+      "confirmBeforePurchase": true,
+      "sourceUrl": "https://apextraderfunding.com/help-center/billing/coupon-codes/",
+      "description": "Apex's latest official coupon-page listing said up to 90% off new evaluation sign-ups with code SAVENOW; its Help Center confirms the code can be entered at checkout. The offer excludes resets and PA activation fees. The coupon page is currently under scheduled maintenance, so today's discount amount and active dates are unconfirmed. Verify both before paying."
+    }
+  ]
 }
