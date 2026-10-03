@@ -367,6 +367,31 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
 @media(max-width:720px){.risk-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.risk-output{grid-template-columns:repeat(2,minmax(0,1fr))}.review-fields{grid-template-columns:1fr}.setting-goals{grid-template-columns:1fr}.brand-credit{padding-bottom:88px}}
 @media(max-width:440px){.risk-card::after{right:14px;top:14px;width:48px;height:48px;opacity:.75}.risk-card{padding:14px}.risk-fields{grid-template-columns:1fr 1fr;gap:0 8px}.risk-fields .wide-mobile{grid-column:1/-1}.goal-progress-list{grid-template-columns:1fr}.risk-metric{padding:11px}.risk-metric-value{font-size:16px}.week-card{padding:14px}}
 @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+.deals-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.deal-card{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;min-height:250px;margin:0;padding:20px;background:radial-gradient(ellipse at 100% 0,rgba(157,81,247,.15),transparent 43%),linear-gradient(145deg,rgba(24,34,59,.98),rgba(13,20,37,.99));box-shadow:var(--depth-shadow),inset 0 1px rgba(255,255,255,.08)}
+:root[data-theme="light"] .deal-card{background:radial-gradient(ellipse at 100% 0,rgba(157,81,247,.09),transparent 43%),linear-gradient(145deg,#FFFFFF,#F5F1FA)}
+.deal-card-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.deal-mark{display:grid;place-items:center;flex:none;width:46px;height:46px;border:1px solid rgba(194,158,255,.32);border-radius:14px;background:linear-gradient(145deg,rgba(156,79,240,.23),rgba(80,49,133,.2));color:var(--brand-light);font:700 13px var(--display);letter-spacing:.04em}
+.deal-name{font:700 17px var(--display);letter-spacing:-.025em}
+.deal-type{color:var(--text-dim);font-size:12px;margin-top:3px}
+.deal-status{display:flex;align-items:center;gap:7px;padding:11px 12px;border:1px solid rgba(166,181,218,.14);border-radius:11px;background:rgba(8,14,28,.27);color:var(--text-dim);font-size:12px;line-height:1.45}
+:root[data-theme="light"] .deal-status{background:rgba(248,246,252,.8)}
+.deal-dot{width:8px;height:8px;flex:none;border-radius:50%;background:#D8A84F;box-shadow:0 0 12px rgba(216,168,79,.4)}
+.deal-card .deal-note{color:var(--text-dim);font-size:12px;line-height:1.55;margin:13px 0 18px}
+.deal-card .deal-link{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.deal-discount{font:700 22px var(--display);color:var(--profit);margin:13px 0 4px}
+.deal-code{font:600 13px var(--mono);letter-spacing:.04em;color:var(--text);padding:9px 11px;border:1px dashed rgba(184,145,245,.35);border-radius:9px;background:rgba(8,14,28,.25)}
+.deal-offer-item+.deal-offer-item{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.deals-notice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin-bottom:16px;border-color:rgba(184,145,245,.2);background:linear-gradient(120deg,rgba(109,57,173,.12),rgba(19,29,50,.75))}
+.deals-notice-icon{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:10px;background:rgba(151,75,255,.18);color:var(--brand-light);font-weight:700}
+.deals-notice p{margin:0;color:var(--text-dim);font-size:13px;line-height:1.55}
+.deals-empty{grid-column:1/-1;padding:22px;text-align:center;border:1px dashed var(--border);border-radius:14px;color:var(--text-dim);font-size:13px;line-height:1.6}
+.deals-source-note{margin-top:14px;color:var(--text-dim);font-size:11px;line-height:1.55}
+.deals-back{margin-bottom:16px}
+.auth-deals-link{width:100%;margin-top:10px}
+.auth-only.public-deals-view .content{display:block;max-width:1180px;min-height:0;align-items:stretch}
+@media(max-width:860px){.deals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.deals-grid{grid-template-columns:1fr}.deal-card{min-height:0}.deals-empty{grid-column:auto}}
 </style>
 <meta name="description" content="CandleX private trading journal for trade reviews, performance tracking, and screenshots.">
 </head>
@@ -379,6 +404,7 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
       <button class="nav-btn" data-action="nav" data-view="calendar">Calendar</button>
       <button class="nav-btn" data-action="nav" data-view="journal">Journal</button>
       <button class="nav-btn" data-action="nav" data-view="stats">Stats</button>
+      <button class="nav-btn" data-action="nav" data-view="deals">Prop firm deals</button>
       <button class="nav-btn" data-action="nav" data-view="settings">Settings</button>
     </nav>
     <div class="sidebar-footer">
@@ -399,6 +425,7 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
     <button class="tab-btn" data-action="nav" data-view="calendar">Calendar</button>
     <button class="tab-btn" data-action="nav" data-view="journal">Journal</button>
     <button class="tab-btn" data-action="nav" data-view="stats">Stats</button>
+    <button class="tab-btn" data-action="nav" data-view="deals">Deals</button>
     <button class="tab-btn" data-action="nav" data-view="settings">Settings</button>
   </nav>
 </div>
@@ -771,7 +798,43 @@ function renderSettings(){
   <div class="card"><label class="field-label">Export</label><p class="sub" style="margin-bottom:10px">Download all your trades and notes as a CSV file.</p><button type="button" class="btn btn-secondary" data-action="export-csv">Export CSV</button></div>`;
 }
 
-const PAGES={dashboard:renderDashboard,calendar:renderCalendar,journal:renderJournal,stats:renderStats,settings:renderSettings};
+const PROP_FIRMS=[
+  {id:'lucid',name:'Lucid Trading',mark:'LT',type:'Futures prop firm',url:'https://lucidtrading.com/',offerUrl:'https://lucidtrading.com/',note:'Check Lucid’s official page for current offers. Some promo codes may be limited to the person they were issued to.'},
+  {id:'tradeify',name:'Tradeify',mark:'TF',type:'Futures prop firm',url:'https://tradeify.co/',offerUrl:'https://tradeify.co/',note:'Tradeify’s official page is the source for current promotional codes and their expiry dates.'},
+  {id:'apex',name:'Apex Trader Funding',mark:'APX',type:'Futures prop firm',url:'https://apextraderfunding.com/',offerUrl:'https://apextraderfunding.com/coupon-code/',note:'Check Apex’s official coupon page and confirm the discount at checkout.'}
+];
+function safeExternalUrl(value){try{const url=new URL(value);return url.protocol==='https:'?url.href:'#';}catch(error){return '#';}}
+function activePublicDeals(feed,firmId){
+  const now=Date.now(),maxAge=72*60*60*1000;
+  return (Array.isArray(feed?.offers)?feed.offers:[]).filter(offer=>{
+    if(offer?.firmId!==firmId||offer.publiclyShareable!==true||!offer.expiresAt||!offer.verifiedAt)return false;
+    const expires=Date.parse(offer.expiresAt),verified=Date.parse(offer.verifiedAt),starts=offer.startsAt?Date.parse(offer.startsAt):-Infinity;
+    return Number.isFinite(expires)&&Number.isFinite(verified)&&(offer.startsAt==null||Number.isFinite(starts))&&expires>now&&starts<=now&&verified<=now&&now-verified<=maxAge;
+  });
+}
+function renderDealCard(firm,feed){
+  const offers=activePublicDeals(feed,firm.id),officialUrl=safeExternalUrl(firm.offerUrl);
+  const status=offers.length?`${offers.length} verified offer${offers.length===1?'':'s'}`:'No verified public offer listed';
+  const offerDetails=offers.length?offers.map(offer=>`<div class="deal-offer-item">${offer.discount?`<div class="deal-discount">${esc(offer.discount)}</div>`:''}${offer.code?`<div class="deal-code">Code: ${esc(offer.code)}</div>`:''}${offer.description?`<p class="deal-note">${esc(offer.description)}</p>`:''}<p class="deal-note">${offer.startsAt?`Valid ${new Date(offer.startsAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})} – `:''}through ${new Date(offer.expiresAt).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}. Check eligible account types and final price at checkout.</p></div>`).join(''):`<p class="deal-note">${esc(firm.note)}</p>`;
+  return `<article class="card deal-card"><div class="deal-card-head"><span class="deal-mark" aria-hidden="true">${esc(firm.mark)}</span><div><div class="deal-name">${esc(firm.name)}</div><div class="deal-type">${esc(firm.type)}</div></div></div><div class="deal-status"><span class="deal-dot" aria-hidden="true"></span><span>${status}</span></div>${offerDetails}<a class="btn btn-secondary deal-link" href="${esc(officialUrl)}" target="_blank" rel="noopener noreferrer">View official offers <span aria-hidden="true">↗</span></a></article>`;
+}
+function renderDeals(isPublic=false){
+  return `${isPublic?'<button type="button" class="btn btn-ghost deals-back" data-action="nav" data-view="auth">← Back to sign in</button>':''}<div class="deals-page"><div class="page-head"><div><h1>Prop firm deals</h1><p class="sub">Official offers from the firms you follow</p></div><span class="badge badge-long">3 firms tracked</span></div><div class="card deals-notice"><span class="deals-notice-icon" aria-hidden="true">✓</span><p>Only current, publicly shareable offers verified within the last 72 hours appear as deals. Always confirm the code, eligible account, and final price on the firm’s checkout page.</p></div><div id="propDealsContent" class="deals-grid" aria-live="polite"><div class="deals-empty">Loading official offer status…</div></div><p class="deals-source-note">Offers are not recommendations to buy an account. Each firm controls its own prices, promotion rules, and expiry dates. CandleX links to the official pages so you can confirm the latest details.</p></div>`;
+}
+async function loadPropFirmDeals(){
+  const board=document.getElementById('propDealsContent');if(!board)return;
+  try{
+    const response=await fetch('./prop-firm-deals.json',{cache:'no-store'});
+    if(!response.ok)throw new Error('Offer list unavailable');
+    const feed=await response.json();
+    const count=PROP_FIRMS.reduce((sum,firm)=>sum+activePublicDeals(feed,firm.id).length,0);
+    board.innerHTML=count?PROP_FIRMS.map(firm=>renderDealCard(firm,feed)).join(''):`<div class="deals-empty">No currently verified, publicly shareable discount is listed. Open an official firm page below to check its latest offers.</div>${PROP_FIRMS.map(firm=>renderDealCard(firm,feed)).join('')}`;
+  }catch(error){
+    board.innerHTML=`<div class="deals-empty">Couldn’t load the offer list right now. You can still check each firm’s official page below.</div>${PROP_FIRMS.map(firm=>renderDealCard(firm,{})).join('')}`;
+  }
+}
+
+const PAGES={dashboard:renderDashboard,calendar:renderCalendar,journal:renderJournal,stats:renderStats,deals:()=>renderDeals(false),settings:renderSettings};
 
 function renderAuth(){
   const registering=authMode==='register';
@@ -781,6 +844,7 @@ function renderAuth(){
   <form id="authForm"><label class="field-label" for="authEmail">Email</label><input class="input" id="authEmail" type="email" name="email" autocomplete="email" maxlength="254" ${disabled} required><label class="field-label" for="authPassword">Password</label><input class="input" id="authPassword" type="password" name="password" autocomplete="${registering?'new-password':'current-password'}" minlength="${registering?10:1}" maxlength="128" ${disabled} required>${registering?'<p class="field-help">Use at least 10 characters.</p>':''}<div class="auth-error" role="alert">${esc(authError)}</div><div class="auth-success" role="status">${esc(authMessage)}</div><button class="btn btn-primary full-btn" type="submit" ${disabled}>${registering?'Create account':'Sign in'}</button></form>
   <p class="auth-switch">${registering?'Already have an account?':'New to CandleX?'} <button type="button" data-action="auth-mode">${registering?'Sign in':'Create an account'}</button></p>
   ${setup?'<button type="button" class="btn btn-secondary full-btn" data-action="offline-mode">Open offline journal</button><p class="field-help" style="text-align:center">Offline entries stay in this browser and do not sync to an account.</p>':''}
+  <button type="button" class="btn btn-ghost full-btn auth-deals-link" data-action="nav" data-view="deals">Browse prop firm deals</button>
   <a class="discord-link discord-auth" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord">${discordIcon()} Join CandleX on Discord</a></section>`;
 }
 
@@ -827,11 +891,11 @@ function renderCsvModal(){return `<div class="modal-backdrop" data-action="close
 function renderModal(){if(!modal)return '';if(modal.mode==='day')return renderDayModal();if(modal.mode==='form')return renderFormModal();if(modal.mode==='detail')return renderTradeDetail();if(modal.mode==='image')return renderImageViewer();if(modal.mode==='csv')return renderCsvModal();return '';}
 
 function updateNavActive(){document.querySelectorAll('[data-action=nav]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));}
-function renderApp(){document.getElementById('app').innerHTML=PAGES[view]();updateNavActive();if(view==='stats')requestAnimationFrame(renderChart);}
+function renderApp(){document.getElementById('app').innerHTML=PAGES[view]();updateNavActive();if(view==='stats')requestAnimationFrame(renderChart);if(view==='deals')loadPropFirmDeals();}
 function render(){
   const app=document.getElementById('app'),accountBar=document.getElementById('accountBar'),modalRoot=document.getElementById('modalRoot');
-  if(!user){document.body.classList.add('auth-only');accountBar.innerHTML='';modalRoot.innerHTML='';app.innerHTML=renderAuth();return;}
-  document.body.classList.remove('auth-only');accountBar.innerHTML=window.CandleXHosted?.enabled?`<span class="user-email">${esc(user.email||'CandleX account')}</span><button class="btn btn-ghost" data-action="sign-out">Sign out</button>`:'<span class="user-email">Offline journal · saved in this browser</span>';
+  if(!user){document.body.classList.add('auth-only');document.body.classList.toggle('public-deals-view',view==='deals');accountBar.innerHTML='';modalRoot.innerHTML='';app.innerHTML=view==='deals'?renderDeals(true):renderAuth();if(view==='deals')loadPropFirmDeals();return;}
+  document.body.classList.remove('auth-only','public-deals-view');accountBar.innerHTML=window.CandleXHosted?.enabled?`<span class="user-email">${esc(user.email||'CandleX account')}</span><button class="btn btn-ghost" data-action="sign-out">Sign out</button>`:'<span class="user-email">Offline journal · saved in this browser</span>';
   renderApp();modalRoot.innerHTML=modal?renderModal():'';
   if(modal?.mode==='form')renderImagePreviews();
 }
