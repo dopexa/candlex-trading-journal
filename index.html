@@ -394,6 +394,123 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
 .auth-only.public-deals-view .content{display:block;max-width:1180px;min-height:0;align-items:stretch}
 @media(max-width:860px){.deals-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.deals-grid{grid-template-columns:1fr}.deal-card{min-height:0}.deals-empty{grid-column:auto}}
+
+/* Refined workspace layout and motion */
+:root{--ease-out:cubic-bezier(.2,.75,.25,1);--glass:rgba(15,22,40,.72)}
+body{background-color:var(--bg)}
+.shell{min-height:100svh}
+.sidebar{position:sticky;top:0;height:100svh;width:248px;padding:30px 18px 20px;background:linear-gradient(180deg,rgba(17,25,45,.98),rgba(10,16,30,.99));border-right-color:rgba(171,150,221,.13)}
+:root[data-theme="light"] .sidebar{background:linear-gradient(180deg,#FBF9FF,#EFECF7);border-right-color:rgba(74,56,111,.12)}
+.sidebar .brand{position:relative;display:flex;align-items:center;gap:11px;margin:0 0 34px;font-size:21px;letter-spacing:-.055em}
+.sidebar .brand::before,.topbar .brand::before{content:"";display:inline-block;flex:none;width:27px;height:27px;border-radius:9px;background:linear-gradient(145deg,#E3C9FF,#9B4DFF 58%,#6724C6);box-shadow:0 0 22px rgba(159,77,255,.35),inset 0 1px rgba(255,255,255,.65)}
+.sidebar .brand::after{content:"";position:absolute;left:8px;top:8px;width:11px;height:11px;border:2px solid #fff;border-radius:4px;transform:rotate(45deg);opacity:.9;pointer-events:none}
+.side-nav{gap:7px}
+.side-nav::before{content:"YOUR WORKSPACE";display:block;padding:0 11px 8px;color:var(--text-dim);font-size:10px;font-weight:700;letter-spacing:.15em;opacity:.75}
+.nav-btn{display:flex;align-items:center;gap:12px;min-height:46px;padding:0 12px;border:1px solid transparent;border-radius:12px;font-size:13px;font-weight:500;transition:transform .22s var(--ease-out),background .22s var(--ease-out),border-color .22s var(--ease-out),color .22s var(--ease-out),box-shadow .22s var(--ease-out)}
+.nav-btn:hover{transform:translateX(2px);background:rgba(150,105,220,.09)}
+.nav-btn.active{background:linear-gradient(110deg,rgba(151,75,255,.18),rgba(151,75,255,.045));border-color:rgba(184,144,241,.13);box-shadow:inset 3px 0 0 var(--brand-light),0 6px 16px rgba(0,0,0,.12)}
+.nav-icon{display:grid;place-items:center;flex:none;width:22px;height:22px;color:currentColor}
+.nav-icon svg{display:block;width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active .nav-icon{color:var(--brand-light);filter:drop-shadow(0 0 6px rgba(179,113,255,.4))}
+.sidebar-footer{padding:16px 8px 4px;border-top:1px solid rgba(166,181,218,.1)}
+.discord-link{transition:color .2s ease,transform .2s ease}
+.discord-link:hover{transform:translateY(-1px)}
+.main{min-height:100svh}
+.content{max-width:1240px;padding:38px clamp(24px,4.2vw,60px) 70px}
+.account-bar{width:100%;max-width:1240px;min-height:48px;margin:0 auto;padding:8px clamp(24px,4.2vw,60px);border-bottom-color:rgba(166,181,218,.1);background:transparent}
+.account-bar .user-email{display:flex;align-items:center;gap:8px;margin-right:auto}
+.account-bar .user-email::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--profit);box-shadow:0 0 10px rgba(34,192,140,.6)}
+.page-head{margin-bottom:28px}
+.page-head .sub{margin-top:5px}
+.btn{transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),filter .2s ease,border-color .2s ease}
+.btn:active{transform:translateY(1px) scale(.985)}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{content:"";position:absolute;inset:0;transform:translateX(-110%);background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.24) 50%,transparent 75%);transition:transform .65s var(--ease-out)}
+.btn-primary:hover::after{transform:translateX(110%)}
+.hero-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);align-items:center;gap:32px;min-height:232px;padding:30px 34px}
+.hero-card::before{right:5%;width:46%;height:140%;opacity:.62;filter:blur(30px)}
+.hero-card::after{right:11%;width:110px;height:110px;opacity:.28;filter:blur(1px)}
+.hero-copy{min-width:0}
+.hero-kicker{display:flex;align-items:center;gap:8px;margin-bottom:17px;color:#D7C5F2;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.hero-kicker i{width:7px;height:7px;border-radius:50%;background:#B880FF;box-shadow:0 0 12px rgba(184,128,255,.8)}
+.hero-label{margin-bottom:6px;color:#C2B6DA;font-size:13px;letter-spacing:.015em}
+.hero-value{font-size:clamp(39px,4.7vw,56px)}
+.hero-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:17px;color:#C0B6D1;font-size:12px}
+.hero-foot span{display:inline-flex;align-items:center;gap:7px}
+.hero-foot i{width:6px;height:6px;border-radius:50%;background:var(--profit);box-shadow:0 0 9px rgba(34,192,140,.6)}
+.hero-chart-box{position:relative;z-index:1;min-width:0;padding:15px 17px 9px;border:1px solid rgba(222,200,255,.16);border-radius:16px;background:linear-gradient(145deg,rgba(13,18,37,.3),rgba(8,13,26,.2));box-shadow:inset 0 1px rgba(255,255,255,.12),0 12px 25px rgba(4,3,17,.12);backdrop-filter:blur(8px)}
+.hero-chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#C2B6DA;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.hero-chart-head span:last-child{color:#E4D5FC;font-size:10px;letter-spacing:0;text-transform:none}
+.hero-chart{display:block;width:100%;height:102px;overflow:visible;margin-top:7px}
+.hero-chart-grid{stroke:rgba(211,189,244,.12);stroke-width:1;stroke-dasharray:3 6}
+.hero-chart-area{fill:url(#dashboardFill)}
+.hero-chart-line{fill:none;stroke:#D6B4FF;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(199,147,255,.65))}
+.hero-chart-dot{fill:#F2E9FF;stroke:#A85CFF;stroke-width:3;filter:drop-shadow(0 0 7px rgba(199,147,255,.7))}
+.tiles{gap:15px;margin-top:15px}
+.tile{min-height:124px;padding:20px}
+.tile:nth-child(4)::before{background:radial-gradient(ellipse at 100% 0,rgba(82,151,246,.16),transparent 52%)}
+.empty{min-height:330px;padding:42px 24px}
+.empty .btn{margin-top:4px}
+.tabbar{padding:7px 7px max(7px,env(safe-area-inset-bottom,0px));background:rgba(12,18,33,.9);border-top-color:rgba(177,153,224,.17);box-shadow:0 -12px 36px rgba(0,0,0,.2);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+:root[data-theme="light"] .tabbar{background:rgba(250,248,255,.94);box-shadow:0 -12px 30px rgba(59,40,94,.1)}
+.tab-btn{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-height:55px;padding:4px 1px 3px;font-size:10px;letter-spacing:.01em;transition:color .2s ease,transform .2s ease}
+.tab-btn .nav-icon{width:20px;height:20px;transition:transform .25s var(--ease-out),filter .25s ease}
+.tab-btn .nav-icon svg{width:18px;height:18px}
+.tab-btn.active{color:var(--brand-light)}
+.tab-btn.active .nav-icon{transform:translateY(-1px);filter:drop-shadow(0 0 7px rgba(179,113,255,.5))}
+.tab-btn:active{transform:scale(.95)}
+.site-footer{padding-top:22px}
+
+/* A more welcoming sign-in screen, with a responsive product preview. */
+.auth-only .topbar{display:none}
+.auth-only .content{display:flex;align-items:center;justify-content:center;width:100%;max-width:none;min-height:100svh;padding:clamp(22px,5vh,62px) clamp(20px,5vw,76px)}
+.auth-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(360px,.82fr);align-items:center;gap:clamp(32px,6vw,88px);width:min(1120px,100%);margin:auto}
+.auth-story{min-width:0;padding:10px 0}
+.auth-story-brand{display:flex;align-items:center;gap:12px;margin-bottom:clamp(28px,6vh,58px)}
+.auth-emblem{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;background:linear-gradient(145deg,#E3C9FF,#9B4DFF 58%,#6724C6);color:#fff;font:800 12px var(--display);letter-spacing:-.05em;box-shadow:0 0 30px rgba(159,77,255,.4),inset 0 1px rgba(255,255,255,.7);transform:rotate(-5deg)}
+.auth-wordmark{font:700 20px var(--display);letter-spacing:-.055em;color:var(--text)}
+.auth-brand-caption{margin-top:2px;color:var(--text-dim);font-size:9px;font-weight:700;letter-spacing:.18em}
+.auth-story-copy{max-width:540px}
+.auth-eyebrow{display:flex;align-items:center;gap:8px;color:#C69AFF;font-size:10px;font-weight:700;letter-spacing:.16em}
+.auth-eyebrow i{width:7px;height:7px;border-radius:50%;background:#BD82FF;box-shadow:0 0 12px rgba(189,130,255,.75)}
+.auth-story-title{margin:15px 0 12px;font:600 clamp(32px,4vw,48px)/1.12 var(--display);letter-spacing:-.055em}
+.auth-story-title span{display:block;color:var(--brand-light)}
+.auth-story-copy p{max-width:470px;color:var(--text-dim);font-size:14px;line-height:1.7;margin:0}
+.auth-visual{position:relative;overflow:hidden;margin-top:28px;padding:16px 18px 12px;border:1px solid rgba(185,158,229,.18);border-radius:18px;background:linear-gradient(145deg,rgba(25,35,59,.82),rgba(13,19,34,.9));box-shadow:0 20px 50px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.09)}
+:root[data-theme="light"] .auth-visual{background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(241,237,249,.95));box-shadow:0 20px 50px rgba(59,40,94,.1),inset 0 1px #fff}
+.auth-visual::before{content:"";position:absolute;right:-55px;top:-88px;width:200px;height:200px;border-radius:50%;background:rgba(144,77,231,.16);filter:blur(40px);pointer-events:none}
+.auth-visual-head{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--text-dim);font-size:9px;font-weight:700;letter-spacing:.13em}
+.auth-visual-tag{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid rgba(171,150,221,.15);border-radius:999px;color:var(--brand-light);font-size:9px;letter-spacing:.04em}
+.auth-visual-tag i{width:5px;height:5px;border-radius:50%;background:var(--profit);box-shadow:0 0 8px rgba(34,192,140,.7)}
+.auth-visual svg{position:relative;display:block;width:100%;height:auto;margin-top:12px;overflow:visible}
+.auth-feature-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;color:var(--text-dim);font-size:11px}
+.auth-feature-row span{display:flex;align-items:center;gap:7px}
+.auth-feature-row i{display:grid;place-items:center;width:17px;height:17px;border:1px solid rgba(34,192,140,.3);border-radius:50%;color:var(--profit);font-size:10px;font-style:normal}
+.auth-card{width:100%;max-width:440px;justify-self:end;padding:30px}
+.auth-card-kicker{margin-bottom:12px;color:var(--brand-light);font-size:10px;font-weight:700;letter-spacing:.15em}
+.auth-card h1{font-size:25px;letter-spacing:-.035em}
+.auth-card .auth-intro{line-height:1.6}
+.auth-setup{line-height:1.55;border-radius:11px}
+.auth-card .input{min-height:45px;border-radius:10px}
+.auth-card .full-btn{min-height:44px}
+.auth-card .auth-switch{margin-top:19px}
+.auth-card .discord-auth{margin-top:15px}
+
+@keyframes rise-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:no-preference){
+  #app>*{animation:rise-in .48s var(--ease-out) both}
+  #app>*:nth-child(2){animation-delay:45ms}
+  #app>*:nth-child(3){animation-delay:90ms}
+  #app>*:nth-child(4){animation-delay:135ms}
+  .auth-layout{animation:rise-in .65s var(--ease-out) both}
+  .auth-emblem{animation:emblem-hover 6s ease-in-out infinite}
+}
+@keyframes emblem-hover{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-2deg) translateY(-3px)}}
+@media(max-width:1020px){.auth-layout{grid-template-columns:minmax(0,1fr) minmax(330px,.88fr);gap:32px}.auth-story-title{font-size:36px}.auth-visual{margin-top:22px}.content{padding-inline:28px}}
+@media(max-width:860px){.content{padding:27px 22px 92px}.account-bar{padding-inline:22px}.hero-card{grid-template-columns:minmax(0,1fr) minmax(230px,.9fr);gap:20px;min-height:210px;padding:25px}.hero-chart-box{padding:13px 13px 7px}.hero-chart{height:90px}.auth-only .content{padding:30px 22px}.auth-layout{grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:25px}.auth-story-brand{margin-bottom:32px}.auth-story-title{font-size:32px}.auth-visual{padding:13px}.auth-feature-row{gap:10px}}
+@media(max-width:700px){.auth-only .content{align-items:flex-start;padding:24px 18px 32px}.auth-layout{display:flex;flex-direction:column;gap:18px;max-width:460px}.auth-story{width:100%;padding:0}.auth-story-brand{margin-bottom:19px}.auth-story-copy{max-width:none}.auth-story-title{font-size:27px;margin:9px 0 7px}.auth-story-copy p{font-size:12px;line-height:1.55}.auth-eyebrow{font-size:9px}.auth-visual,.auth-feature-row{display:none}.auth-card{max-width:none;justify-self:auto;padding:24px}.hero-card{grid-template-columns:1fr;gap:17px}.hero-card::after{right:7%;top:20%;width:94px;height:94px}.hero-chart-box{max-width:none}.hero-chart{height:84px}.hero-kicker{margin-bottom:12px}.hero-foot{margin-top:12px}.tile{min-height:105px}}
+@media(max-width:520px){.content{padding:22px 14px 94px}.account-bar{padding-inline:14px}.page-head{gap:10px;margin-bottom:20px}.page-head h1{font-size:25px}.hero-card{padding:22px 18px}.hero-value{font-size:36px}.tiles{gap:10px;margin-top:10px}.tile{padding:14px}.tile-value{font-size:21px;margin-top:8px}.empty{min-height:290px;padding:30px 18px}.tabbar{left:8px;right:8px;bottom:8px;border:1px solid rgba(177,153,224,.2);border-radius:18px;padding:6px 3px max(6px,env(safe-area-inset-bottom,0px));box-shadow:0 16px 45px rgba(0,0,0,.4)}.tab-btn{min-height:49px;font-size:9px}.tab-btn .nav-icon svg{width:17px;height:17px}.brand-credit{padding-bottom:96px}}
+@media(max-width:390px){.tab-btn{font-size:8px}.tab-btn .nav-icon{width:18px;height:18px}.tab-btn .nav-icon svg{width:16px;height:16px}.auth-card{padding:20px}.auth-story-title{font-size:25px}.hero-card{padding:20px 16px}.hero-value{font-size:32px}.hero-chart-box{padding:11px}.hero-foot{gap:9px;font-size:11px}}
 </style>
 <meta name="description" content="CandleX private trading journal for trade reviews, performance tracking, and screenshots.">
 </head>
@@ -402,12 +519,12 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
   <aside class="sidebar">
     <div class="brand">CandleX</div>
     <nav class="side-nav">
-      <button class="nav-btn" data-action="nav" data-view="dashboard">Dashboard</button>
-      <button class="nav-btn" data-action="nav" data-view="calendar">Calendar</button>
-      <button class="nav-btn" data-action="nav" data-view="journal">Journal</button>
-      <button class="nav-btn" data-action="nav" data-view="stats">Stats</button>
-      <button class="nav-btn" data-action="nav" data-view="deals">Prop firm deals</button>
-      <button class="nav-btn" data-action="nav" data-view="settings">Settings</button>
+      <button class="nav-btn" data-action="nav" data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Dashboard</span></button>
+      <button class="nav-btn" data-action="nav" data-view="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18M8 14h2m4 0h2m-8 3h2"/></svg></span><span>Calendar</span></button>
+      <button class="nav-btn" data-action="nav" data-view="journal"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 10h14M5 15h9M5 20h14"/><circle cx="3" cy="5" r=".7"/><circle cx="3" cy="10" r=".7"/><circle cx="3" cy="15" r=".7"/><circle cx="3" cy="20" r=".7"/></svg></span><span>Journal</span></button>
+      <button class="nav-btn" data-action="nav" data-view="stats"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19h18M5 16l5-5 4 3 6-8"/><path d="M15 6h5v5"/></svg></span><span>Stats</span></button>
+      <button class="nav-btn" data-action="nav" data-view="deals"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 12 9-9h8v8l-9 9z"/><circle cx="16" cy="8" r="1.2"/><path d="m8 16 3 3"/></svg></span><span>Prop firm deals</span></button>
+      <button class="nav-btn" data-action="nav" data-view="settings"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 1 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a1.7 1.7 0 1 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 1 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 1 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 1 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V4a1.7 1.7 0 1 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 1 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a1.7 1.7 0 1 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9z"/></svg></span><span>Settings</span></button>
     </nav>
     <div class="sidebar-footer">
       <a class="discord-link" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord">
@@ -423,12 +540,12 @@ h1{font-family:var(--display);font-size:clamp(24px,3vw,32px);letter-spacing:-.04
     <footer class="brand-credit" aria-label="Created by AIVAZA and TIGHTFICE"><span>by</span><strong>AIVAZA</strong><i>&amp;</i><strong>TIGHTFICE</strong></footer>
   </div>
   <nav class="tabbar">
-    <button class="tab-btn" data-action="nav" data-view="dashboard">Dashboard</button>
-    <button class="tab-btn" data-action="nav" data-view="calendar">Calendar</button>
-    <button class="tab-btn" data-action="nav" data-view="journal">Journal</button>
-    <button class="tab-btn" data-action="nav" data-view="stats">Stats</button>
-    <button class="tab-btn" data-action="nav" data-view="deals">Deals</button>
-    <button class="tab-btn" data-action="nav" data-view="settings">Settings</button>
+    <button class="tab-btn" data-action="nav" data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Home</span></button>
+    <button class="tab-btn" data-action="nav" data-view="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18M8 14h2m4 0h2"/></svg></span><span>Calendar</span></button>
+    <button class="tab-btn" data-action="nav" data-view="journal"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 10h14M5 15h9M5 20h14"/><circle cx="3" cy="5" r=".7"/><circle cx="3" cy="10" r=".7"/><circle cx="3" cy="15" r=".7"/><circle cx="3" cy="20" r=".7"/></svg></span><span>Journal</span></button>
+    <button class="tab-btn" data-action="nav" data-view="stats"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19h18M5 16l5-5 4 3 6-8"/><path d="M15 6h5v5"/></svg></span><span>Stats</span></button>
+    <button class="tab-btn" data-action="nav" data-view="deals"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 12 9-9h8v8l-9 9z"/><circle cx="16" cy="8" r="1.2"/><path d="m8 16 3 3"/></svg></span><span>Deals</span></button>
+    <button class="tab-btn" data-action="nav" data-view="settings"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 1 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a1.7 1.7 0 1 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 1 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 1 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 1 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V4a1.7 1.7 0 1 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 1 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a1.7 1.7 0 1 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9z"/></svg></span><span>Settings</span></button>
   </nav>
 </div>
 <div id="modalRoot"></div>
@@ -642,12 +759,21 @@ function exportCsv(){
 
 function statTile(label,value,cls){return `<div class="tile"><div class="tile-label">${esc(label)}</div><div class="tile-value ${cls||''}">${value}</div></div>`;}
 function emptyState(title,body,showBtn){return `<div class="empty"><div class="empty-title">${esc(title)}</div><div class="empty-body">${esc(body)}</div>${showBtn?'<button class="btn btn-primary" data-action="add-trade">+ Add trade</button>':''}</div>`;}
+function dashboardSparkline(trades,total){
+  const ordered=trades.slice().sort((a,b)=>a.date.localeCompare(b.date)||String(a.id).localeCompare(String(b.id)));
+  const values=[0];let running=0;ordered.forEach(t=>{running+=signed(t);values.push(running);});
+  let low=Math.min(...values),high=Math.max(...values);if(high-low<0.01){low-=1;high+=1;}
+  const points=values.map((value,index)=>({x:10+index*(340/Math.max(1,values.length-1)),y:82-((value-low)/(high-low))*62}));
+  const line=points.map((point,index)=>`${index?'L':'M'}${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' '),last=points[points.length-1];
+  const area=`M${points[0].x.toFixed(1)} 92 ${points.map(point=>`L${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' ')} L${last.x.toFixed(1)} 92 Z`;
+  return `<svg class="hero-chart" viewBox="0 0 360 100" preserveAspectRatio="none" role="img" aria-label="Monthly cumulative P/L trend, ending ${esc(fmtSigned(total))}"><defs><linearGradient id="dashboardFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#C693FF" stop-opacity=".38"/><stop offset="100%" stop-color="#A75AFF" stop-opacity="0"/></linearGradient></defs><path class="hero-chart-grid" d="M0 22H360M0 52H360M0 82H360"/><path class="hero-chart-area" d="${area}"/><path class="hero-chart-line" d="${line}"/><circle class="hero-chart-dot" cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4.5"/></svg>`;
+}
 
 function renderDashboard(){
   const now=new Date(),list=tradesInMonth(now.getFullYear(),now.getMonth()),total=sumSigned(list),wins=list.filter(t=>t.result==='profit').length,losses=list.length-wins,wr=list.length?Math.round(wins/list.length*100):null;
   const monthLabel=now.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-  return `<div class="page-head"><div><h1>Dashboard</h1><p class="sub">${esc(monthLabel)}</p></div><button class="btn btn-primary" data-action="add-trade">+ Add trade</button></div>
-  ${list.length===0?emptyState('No trades yet this month','Log your first trade to see your monthly performance here.',false):`<div class="hero-card"><div class="hero-label">This month's P/L</div><div class="hero-value ${plClass(total)}">${fmtSigned(total)}</div></div>
+  return `<div class="page-head"><div><h1>Dashboard</h1><p class="sub">Your trading month at a glance · ${esc(monthLabel)}</p></div><button class="btn btn-primary" data-action="add-trade">+ Add trade</button></div>
+  ${list.length===0?emptyState('A fresh month, a fresh plan','Log your first trade to start building a clearer picture of your process.',true):`<div class="hero-card"><div class="hero-copy"><div class="hero-kicker"><i aria-hidden="true"></i> MONTHLY PERFORMANCE</div><div class="hero-label">Net profit / loss</div><div class="hero-value ${plClass(total)}">${fmtSigned(total)}</div><div class="hero-foot"><span><i aria-hidden="true"></i>${list.length} trade${list.length===1?'':'s'} logged</span><span>${wr}% winning trades</span></div></div><div class="hero-chart-box"><div class="hero-chart-head"><span>Cumulative P/L</span><span>${esc(monthLabel)}</span></div>${dashboardSparkline(list,total)}</div></div>
   <div class="tiles">${statTile('Trades',list.length)}${statTile('Winning trades',wins,'profit')}${statTile('Losing trades',losses,'loss')}${statTile('Win rate',wr+'%')}</div>`}`;
 }
 function renderCalendar(){
@@ -847,13 +973,13 @@ const PAGES={dashboard:renderDashboard,calendar:renderCalendar,journal:renderJou
 function renderAuth(){
   const registering=authMode==='register';
   const setup=HOSTED_AUTH_UNCONFIGURED&&!forceOfflineMode,disabled=setup?'disabled':'';
-  return `<section class="auth-card"><div class="auth-brand">CandleX</div><h1>${registering?'Create your account':'Welcome back'}</h1><p class="sub auth-intro">${registering?'Create a private journal account to save your trades and screenshots.':'Sign in to open your private trading journal.'}</p>
+  return `<div class="auth-layout"><section class="auth-story" aria-label="CandleX trading journal"><div class="auth-story-brand"><span class="auth-emblem" aria-hidden="true">CX</span><div><div class="auth-wordmark">CandleX</div><div class="auth-brand-caption">TRADING JOURNAL</div></div></div><div class="auth-story-copy"><div class="auth-eyebrow"><i aria-hidden="true"></i> BUILT FOR BETTER HABITS</div><h2 class="auth-story-title">Make every trade <span>teach you something.</span></h2><p>Bring your trades, notes, and reviews together. Spot your patterns and build a process you can trust.</p></div><div class="auth-visual"><div class="auth-visual-head"><span>YOUR PROCESS, IN FOCUS</span><span class="auth-visual-tag"><i aria-hidden="true"></i> PRIVATE JOURNAL</span></div><svg viewBox="0 0 520 150" aria-hidden="true"><defs><linearGradient id="storyLine" x1="0" x2="1"><stop offset="0%" stop-color="#9560DF"/><stop offset="100%" stop-color="#D8B5FF"/></linearGradient><linearGradient id="storyFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#A65BFF" stop-opacity=".3"/><stop offset="100%" stop-color="#A65BFF" stop-opacity="0"/></linearGradient></defs><path d="M0 28H520M0 68H520M0 108H520" stroke="rgba(192,170,226,.13)" stroke-dasharray="3 7"/><g fill="rgba(155,77,255,.2)" stroke="rgba(205,172,255,.42)"><path d="M35 80h8v40h-8zM34 55h10v25H34zM90 59h8v58h-8zM89 38h10v21H89zM145 66h8v43h-8zM144 48h10v18h-10zM200 45h8v64h-8zM199 28h10v17h-10zM255 58h8v50h-8zM254 38h10v20h-10zM310 36h8v70h-8zM309 22h10v14h-10zM365 49h8v57h-8zM364 33h10v16h-10zM420 31h8v75h-8zM419 17h10v14h-10zM475 41h8v65h-8zM474 23h10v18h-10z"/></g><path d="M0 121 C40 113 53 75 94 82S150 105 181 84s45-33 77-14 45 28 75 8 53-42 82-23 55 27 105-31v126H0z" fill="url(#storyFill)"/><path d="M0 121 C40 113 53 75 94 82S150 105 181 84s45-33 77-14 45 28 75 8 53-42 82-23 55 27 105-31" fill="none" stroke="url(#storyLine)" stroke-width="3" stroke-linecap="round"/><circle cx="420" cy="55" r="5" fill="#F5EBFF" stroke="#A65BFF" stroke-width="3"/></svg></div><div class="auth-feature-row"><span><i aria-hidden="true">✓</i> Trades in one place</span><span><i aria-hidden="true">✓</i> Learn from each session</span></div></section><section class="auth-card"><div class="auth-card-kicker">PRIVATE TRADING WORKSPACE</div><h1>${registering?'Create your account':'Welcome back'}</h1><p class="sub auth-intro">${registering?'Create a private journal account to save your trades and screenshots.':'Sign in to open your private trading journal.'}</p>
   ${setup?'<div class="auth-setup" role="status">Account registration is being set up. Sign In and Sign Up will work when setup is complete.</div>':''}
   <form id="authForm"><label class="field-label" for="authEmail">Email</label><input class="input" id="authEmail" type="email" name="email" autocomplete="email" maxlength="254" ${disabled} required><label class="field-label" for="authPassword">Password</label><input class="input" id="authPassword" type="password" name="password" autocomplete="${registering?'new-password':'current-password'}" minlength="${registering?10:1}" maxlength="128" ${disabled} required>${registering?'<p class="field-help">Use at least 10 characters.</p>':''}<div class="auth-error" role="alert">${esc(authError)}</div><div class="auth-success" role="status">${esc(authMessage)}</div><button class="btn btn-primary full-btn" type="submit" ${disabled}>${registering?'Create account':'Sign in'}</button></form>
   <p class="auth-switch">${registering?'Already have an account?':'New to CandleX?'} <button type="button" data-action="auth-mode">${registering?'Sign in':'Create an account'}</button></p>
   ${setup?'<button type="button" class="btn btn-secondary full-btn" data-action="offline-mode">Open offline journal</button><p class="field-help" style="text-align:center">Offline entries stay in this browser and do not sync to an account.</p>':''}
   <button type="button" class="btn btn-ghost full-btn auth-deals-link" data-action="nav" data-view="deals">Browse prop firm deals</button>
-  <a class="discord-link discord-auth" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord">${discordIcon()} Join CandleX on Discord</a></section>`;
+  <a class="discord-link discord-auth" href="https://discord.gg/dSD7CqfAw" target="_blank" rel="noopener noreferrer" aria-label="Join CandleX on Discord (opens in a new tab)" title="Join CandleX on Discord">${discordIcon()} Join CandleX on Discord</a></section></div>`;
 }
 
 function tagChipHtml(tag){return `<span class="tag-chip" data-chip="" data-tag="${esc(tag)}">${esc(tag)}<button type="button" data-action="remove-tag" aria-label="Remove tag ${esc(tag)}">×</button></span>`;}
