@@ -71,6 +71,15 @@
     return unwrap(await client.auth.getUser(), 'Please sign in again.')?.user || null;
   }
 
+  function legacyAccountId(name) {
+    let hash = 2166136261;
+    for (const ch of String(name).toLocaleLowerCase()) {
+      hash ^= ch.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `legacy-${(hash >>> 0).toString(36)}`;
+  }
+
   function normalizePreferences(body, userId) {
     const settings = body?.settings || {};
     if (!currencies.includes(settings.currency || 'USD')) throw new Error('Choose a supported currency.');
@@ -98,14 +107,28 @@
       weeklyReviews[key] = normalized;
     }
     if (!Array.isArray(body?.accounts || [])) throw new Error('Trading accounts are not valid.');
-    const accounts = [];
+    const accounts = [], accountIds = new Set(), accountNames = new Set();
     for (const value of (body.accounts || [])) {
-      if (typeof value !== 'string' || !value.trim() || value.trim().length > 80) throw new Error('Trading account names must be 1–80 characters.');
-      const label = value.trim();
-      if (!accounts.some(item => item.toLowerCase() === label.toLowerCase())) accounts.push(label);
+      const legacy = typeof value === 'string';
+      const name = String(legacy ? value : value?.name || '').trim();
+      if (!name || name.length > 80) throw new Error('Trading account names must be 1–80 characters.');
+      const normalizedName = name.toLocaleLowerCase();
+      if (accountNames.has(normalizedName)) throw new Error('Trading account names must be unique.');
+      const id = legacy ? legacyAccountId(name) : String(value?.id || '');
+      if (!/^[a-zA-Z0-9_-]{1,80}$/.test(id) || accountIds.has(id)) throw new Error('Trading account IDs are not valid.');
+      const kind = legacy ? 'personal' : (value?.kind || 'personal');
+      const initialBalance = legacy ? 0 : Number(value?.initialBalance || 0);
+      if (!['personal', 'prop', 'demo'].includes(kind) || !Number.isFinite(initialBalance) || initialBalance < 0 || initialBalance > 1e12) {
+        throw new Error('Trading account type and starting capital must be valid.');
+      }
+      accounts.push({ id, name, kind, initialBalance });
+      accountIds.add(id);
+      accountNames.add(normalizedName);
     }
     if (accounts.length > 100) throw new Error('You can save up to 100 trading accounts.');
-    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
+    const requestedAccountId = typeof settings.activeAccountId === 'string' ? settings.activeAccountId : 'all';
+    const activeAccountId = requestedAccountId === 'all' || accountIds.has(requestedAccountId) ? requestedAccountId : 'all';
+    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', activeAccountId, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
   }
 
   function normalizeTrade(value) {
@@ -135,6 +158,10 @@
       tags: [...new Set(tags.map(tag => tag.trim()))],
       emotions: [...new Set(selectedEmotions)]
     };
+    if (value.accountId != null && value.accountId !== '') {
+      if (typeof value.accountId !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(value.accountId)) throw new Error('Choose a valid trading account.');
+      trade.accountId = value.accountId;
+    }
     for (const field of ['marketConditions','rationale','lessons']) {
       const note = value[field] || '';
       if (typeof note !== 'string' || note.length > 5000) throw new Error('Each note must be 5,000 characters or fewer.');
