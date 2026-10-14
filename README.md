@@ -9,3 +9,5 @@ The hosted site uses Supabase Auth and private, user-owned journal data. New use
 The public **Prop firm deals** page links to Lucid Trading, Tradeify, and Apex Trader Funding. It reads verified, publicly shareable offers from [`prop-firm-deals.json`](prop-firm-deals.json); see [`PROP_FIRM_DEALS.md`](PROP_FIRM_DEALS.md) for the offer format and review rules. No automated deal feeds are configured yet.
 
 Only the Supabase publishable key belongs in `hosted-backend.js`. Never publish a database password, `sb_secret_...` key, or `service_role` key.
+
+The dashboard uses the existing accounts and daily-result data for its equity curve, monthly heatmap, account progress, recent trades, and quick statistics. The compact sidebar, mobile **More** menu, session clock, and account switcher are part of the static front end. Branding files live under [`assets/`](assets/); all app image and script URLs are relative to the GitHub Pages project path.
