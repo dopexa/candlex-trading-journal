@@ -1,15 +1,25 @@
-# CandleX Supabase setup
+# CandleX Supabase configuration
 
-The GitHub Pages site is static, so it cannot host its own password or session database. CandleX needs a backend before hosted Sign Up and Sign In can be enabled. This setup uses Supabase Auth, row-level security, and a private image bucket.
+CandleX's hosted site is connected to its existing Supabase project. Sign Up and Sign In use Supabase Auth; journal settings, trading accounts, trades, daily results, and screenshots are stored for the signed-in user.
 
-## Create the project
+## Current configuration
 
-The CandleX organization is already set up on the free plan. Supabase now needs a database password before it can create the project. Enter that password directly in the Supabase form and submit **Create new project**. Keep the password private; CandleX's browser app will use the publishable key and authenticated sessions, not the database password.
+- `hosted-backend.js` contains the project URL and browser-safe publishable key. It must never contain a database password, `sb_secret_...` key, or `service_role` key.
+- Supabase Auth's **Site URL** and **Redirect URLs** are set to `https://dopexa.github.io/candlex-trading-journal/`.
+- Email registration is enabled. Users must confirm their email address before their first sign-in.
+- Trading accounts remain in the `user_preferences.accounts` JSONB array, preserving the existing account and trade IDs.
+- The `user_preferences`, `trades`, `daily_results`, and `trade_images` tables have row-level security enabled and per-user policies.
+- The `trade-screenshots` Storage bucket is private and limits each image to 5 MB.
 
-After the project is ready:
+## Recreate the backend in another project
 
-1. Open **SQL Editor**, create a query, paste the contents of [`schema.sql`](schema.sql), and run it. This creates user-owned trade/preferences tables, restrictive row-level security policies, and a private screenshot bucket capped at 5 MB per image.
-2. Set Supabase Auth's **Site URL** and **Redirect URLs** to `https://dopexa.github.io/candlex-trading-journal/`.
-3. CandleX's hosted adapter needs the **Project URL** and **publishable key**. These are public browser configuration values; never use an `sb_secret_...` key or `service_role` key in the app.
+1. Create a Supabase project and keep its database password private.
+2. Run [`schema.sql`](schema.sql) in the new project's SQL Editor. It creates the tables, policies, signup trigger, screenshot limits, monthly daily-result view, and private Storage bucket used by CandleX.
+3. Set Auth's **Site URL** and **Redirect URLs** to the deployed CandleX URL.
+4. Set the new project's URL and publishable key in `hosted-backend.js`. Use only the publishable key in browser code.
 
-Email confirmation can remain enabled; new users will need to confirm their address before their first sign-in. No credentials or real user data belong in this setup file.
+No database password or real user data belongs in this repository. Do not run the recreation steps against the existing project unless repairing a missing resource.
+
+## Add daily results to an existing project
+
+Run [`migration-20261014-daily-results.sql`](migration-20261014-daily-results.sql) in the existing project's SQL Editor. It only adds the `daily_results` table, its owner-only RLS policy, update trigger, and monthly summary view. It does not replace existing accounts or trade records. The browser API checks that a result references one of the signed-in user's saved accounts.

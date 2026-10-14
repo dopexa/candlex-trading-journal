@@ -6,7 +6,7 @@
 <title>CandleX — Trading Journal</title>
 <script>document.documentElement.setAttribute('data-theme','dark');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Noto+Sans+Georgian:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 :root{
@@ -619,6 +619,96 @@ body{background-color:var(--bg)}
 @media(max-width:520px){.account-bar{min-height:0;gap:7px}.account-bar .user-email{order:0;flex:1;max-width:none;font-size:10px}.account-bar>.btn{order:1}.account-picker,.account-create-link{order:2;flex:1 1 100%}.account-picker{justify-content:space-between}.account-picker .input{width:100%;max-width:none}.account-create-form{grid-template-columns:1fr}.account-create-form .btn{justify-self:start}.account-card-stats{gap:5px}.account-card-stats strong{font-size:10px}.account-meta-form{grid-template-columns:1fr 1fr}.account-meta-form label:first-child{grid-column:1/-1}.cal-grid{gap:5px}.cal-cell{min-height:72px;padding:5px;border-radius:8px}.cal-nav{min-height:68px}.cal-month strong{font-size:14px}.cal-pl{font-size:9px}.cal-count{font-size:8px}.cal-arrow{width:34px;height:34px}}
 @media(prefers-reduced-motion:reduce){.cal-grid,.cal-cell,.cal-arrow{animation:none!important;transition:none!important}.cal-cell:not(.cal-empty):hover,.cal-arrow:hover{transform:none!important}}
 
+/* Calm instrument palette and compact account calendar */
+:root{--bg:#0E1217;--surface:#151B23;--surface2:#1C2430;--border:#263041;--text:#E6EAF0;--text-dim:#8A96A8;--brand:#E8B64C;--brand-light:#E8B64C;--profit:#2FBF8F;--loss:#E5584F;--font:'Inter','Noto Sans Georgian',system-ui,-apple-system,sans-serif;--display:'Manrope','Noto Sans Georgian',system-ui,sans-serif}
+:root[data-theme="light"]{--bg:#F5F6F7;--surface:#FFFFFF;--surface2:#EEF1F4;--border:#D5DCE4;--text:#202832;--text-dim:#697786;--brand:#9C741B;--brand-light:#9C741B;--profit:#168B65;--loss:#C44239}
+body::before{display:none!important}
+.content{max-width:1280px}
+.sidebar{background:var(--surface);border-color:var(--border);box-shadow:none}
+.sidebar .brand,.topbar .brand{color:var(--text);letter-spacing:-.04em}
+.nav-btn.active,.nav-btn:hover,.tab-btn.active{color:var(--brand-light)}
+.nav-btn.active{background:rgba(232,182,76,.09)}
+.btn-primary{background:var(--brand);color:#17130A;border-color:var(--brand);font-weight:700}
+.btn-primary:hover{filter:brightness(1.04)}
+.account-picker,.account-create-link{border-color:var(--border);background:var(--surface)}
+.account-picker .input{background:var(--surface2)}
+.card,.trade-row,.tile,.hero-card,.cal-nav,.cal-cell,.account-card,.week-card,.risk-card,.empty,.auth-card{background:var(--surface)!important;border:1px solid var(--border)!important;box-shadow:none!important}
+.card:hover,.trade-row:hover,.tile:hover,.cal-cell:not(.cal-empty):hover{transform:none!important;box-shadow:none!important;border-color:var(--brand)!important}
+.tile::before,.hero-card::after,.empty::before,.empty::after,.risk-card::after,.auth-card::before{display:none!important}
+.hero-card{border-radius:12px}.card,.trade-row,.tile,.account-card{border-radius:12px}
+.hero-kicker,.account-kind,.status-badge,.news-eyebrow{letter-spacing:.08em}
+.cal-nav{grid-template-columns:42px minmax(0,1fr) auto;gap:8px;background:var(--surface)!important;border-radius:12px;box-shadow:none!important}
+.cal-nav-actions{display:flex;align-items:center;gap:8px}
+.cal-today{padding:8px 11px;font-size:12px}
+.cal-arrow{border-color:var(--border);border-radius:8px;background:var(--surface2);color:var(--text)}
+.cal-arrow:hover{transform:none;border-color:var(--brand);background:var(--surface2)}
+.cal-grid{display:flex;flex-direction:column;gap:8px;perspective:none}
+.cal-weekdays,.cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 96px;gap:8px}
+.cal-dow{padding:4px 2px;text-align:center;color:var(--text-dim);font-size:11px;font-weight:600}
+.cal-cell{min-height:84px;padding:8px;border-radius:9px;background:var(--surface)!important;border-color:var(--border)!important;box-shadow:none!important;cursor:pointer;animation:none!important;transition:border-color .15s,background-color .15s}
+.cal-cell.has-data.is-profit{background:rgba(47,191,143,var(--pnl-alpha))!important;border-color:rgba(47,191,143,.44)!important}
+.cal-cell.has-data.is-loss{background:rgba(229,88,79,var(--pnl-alpha))!important;border-color:rgba(229,88,79,.4)!important}
+.cal-cell.has-data.is-flat{background:var(--surface2)!important}
+.cal-cell.is-today{border-color:var(--brand)!important;box-shadow:inset 0 0 0 1px var(--brand)!important}
+.cal-cell.is-today .cal-daynum{background:var(--brand);color:#17130A;box-shadow:none}
+.cal-cell:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.cal-cell-marker{color:var(--text-dim);font-size:17px;line-height:1}
+.cal-pl,.cal-count,.cal-daynum{font-variant-numeric:tabular-nums}
+.cal-pl{margin-top:auto;font-size:clamp(10px,1vw,13px)}
+.cal-count{margin-top:3px;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-dim)}
+.cal-short-value{display:none}
+.cal-week-total{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);font-variant-numeric:tabular-nums}
+.cal-week-total span{font-size:10px;color:var(--text-dim)}
+.cal-week-total strong{font-size:12px;white-space:nowrap}
+.month-summary{margin-bottom:14px}
+.month-summary-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.month-net{display:grid;text-align:right;font:700 22px var(--mono);font-variant-numeric:tabular-nums}
+.month-net span{color:var(--text-dim);font:600 9px var(--font);letter-spacing:.08em;text-transform:uppercase}
+.month-metrics{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:12px}
+.month-metrics .tile{min-width:0;min-height:0;padding:11px;background:var(--surface2)!important;border-color:var(--border)!important}
+.month-metrics .tile-label{font-size:9px;letter-spacing:.04em}
+.month-metrics .tile-value{margin-top:6px;font-size:14px;text-shadow:none;overflow-wrap:anywhere}
+.account-breakdown{display:grid;gap:7px;margin-top:13px;padding-top:12px;border-top:1px solid var(--border);font-size:12px}
+.account-breakdown>strong{font-weight:600}
+.account-breakdown>div{display:flex;justify-content:space-between;gap:12px}
+.account-breakdown small{margin-left:6px;color:var(--text-dim);font-size:10px}
+.account-card-head>div:first-child{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.account-card h3{flex-basis:100%;margin-top:2px}
+.account-firm{margin:0;color:var(--text-dim);font-size:12px}
+.status-badge{display:inline-flex;padding:4px 7px;border:1px solid var(--border);border-radius:999px;color:var(--text-dim);font-size:9px;font-weight:700;text-transform:uppercase}
+.status-funded,.status-passed{color:var(--profit);border-color:rgba(47,191,143,.35)}
+.status-failed{color:var(--loss);border-color:rgba(229,88,79,.35)}
+.account-card.is-archived{opacity:.7}
+.account-progress{display:grid;gap:6px;margin:12px 0}
+.account-progress>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--text-dim)}
+.account-progress strong{color:var(--text);font-weight:600}
+.account-progress .progress-fill{background:var(--brand);box-shadow:none}
+.account-meta-form,.account-create-form{grid-template-columns:repeat(3,minmax(0,1fr));align-items:end}
+.account-meta-form label>span,.account-create-form label>span{font-size:10px;letter-spacing:.04em}
+.account-meta-form .input,.account-create-form .input{font-size:12px}
+.account-card-foot{justify-content:space-between;align-items:center;gap:8px}
+.account-card-foot>div{display:flex;gap:12px}
+.account-card-foot .account-delete{color:var(--loss)}
+.day-modal-backdrop{justify-content:flex-end;align-items:stretch;padding:0;background:rgba(4,8,12,.58)}
+.day-panel{width:min(560px,100vw);max-width:none;height:100%;max-height:100%;border-radius:16px 0 0 16px;background:var(--surface)!important;animation:day-panel-in .2s ease both}
+.day-panel-body{display:grid;align-content:start;gap:24px;overflow:auto;max-height:calc(100% - 60px)}
+.daily-result-form{display:grid;gap:5px}
+.daily-result-form .field-label{margin:8px 0 3px}
+.daily-result-form .btn{margin-top:9px}
+.daily-save-feedback{min-height:16px;color:var(--profit);font-size:11px}
+.day-trades{border-top:1px solid var(--border);padding-top:16px}
+.day-trades .trade-row{padding:8px}
+.day-trades>.btn{margin-top:5px}
+.profit,.loss,.flat,.hero-value,.tile-value,.trade-amt,.cal-pl,.month-net,.account-card-pnl,.account-card-stats strong{font-variant-numeric:tabular-nums}
+.input:focus,.tag-entry:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(232,182,76,.14)}
+.nav-btn:focus-visible,.tab-btn:focus-visible,.icon-btn:focus-visible,.btn:focus-visible,.emotion-chip:focus-visible{outline-color:var(--brand)}
+.tabbar{overflow-x:auto;justify-content:flex-start}.tab-btn{flex:1 0 48px}
+@keyframes day-panel-in{from{opacity:.5;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:900px){.month-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.account-create-form,.account-meta-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.cal-weekdays,.cal-week{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.cal-weekdays .weekly-heading{display:none}.cal-week{row-gap:4px}.cal-cell{min-height:68px;padding:5px;border-radius:7px}.cal-week-total{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;padding:6px 9px}.cal-full-value{display:none}.cal-short-value{display:inline}.cal-count{font-size:8px}.cal-nav{grid-template-columns:36px minmax(0,1fr) auto;padding:8px;gap:5px}.cal-month strong{font-size:13px}.cal-month span{font-size:9px}.cal-arrow{width:32px;height:32px}.cal-today{padding:7px;font-size:10px}.month-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.month-summary-head{align-items:flex-start}.month-net{font-size:18px}.month-metrics .tile-value{font-size:13px}.day-modal-backdrop{align-items:flex-end;justify-content:center;padding:0}.day-panel{width:100%;height:min(86vh,780px);border-radius:16px 16px 0 0}.account-meta-form,.account-create-form{grid-template-columns:1fr}.account-meta-form button,.account-create-form button{justify-self:start}.tabbar{left:6px;right:6px;gap:0}.tab-btn{flex-basis:43px;padding-inline:0}.tab-btn>span:last-child{font-size:8px}}
+@media(max-width:380px){.cal-cell{min-height:61px;padding:4px}.cal-daynum{width:21px;height:21px;font-size:10px}.cal-short-value{font-size:9px}.cal-count{font-size:7px}.account-card-stats{grid-template-columns:1fr 1fr}.account-card-stats>div:last-child{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.day-panel{animation:none!important}}
+
 </style>
 <meta name="description" content="CandleX private trading journal for trade reviews, performance tracking, and screenshots.">
 </head>
@@ -629,6 +719,7 @@ body{background-color:var(--bg)}
     <nav class="side-nav">
       <button class="nav-btn" data-action="nav" data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Dashboard</span></button>
       <button class="nav-btn" data-action="nav" data-view="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18M8 14h2m4 0h2m-8 3h2"/></svg></span><span>Calendar</span></button>
+      <button class="nav-btn" data-action="nav" data-view="accounts"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-14 5h4m6 0h1"/></svg></span><span>Accounts</span></button>
       <button class="nav-btn" data-action="nav" data-view="weeklyNews"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h16M5 15l4-5 3 3 7-8"/><circle cx="9" cy="10" r="1"/><circle cx="12" cy="13" r="1"/><path d="M15 5h4v4"/></svg></span><span>Weekly News</span></button>
       <button class="nav-btn" data-action="nav" data-view="journal"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 10h14M5 15h9M5 20h14"/><circle cx="3" cy="5" r=".7"/><circle cx="3" cy="10" r=".7"/><circle cx="3" cy="15" r=".7"/><circle cx="3" cy="20" r=".7"/></svg></span><span>Journal</span></button>
       <button class="nav-btn" data-action="nav" data-view="stats"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19h18M5 16l5-5 4 3 6-8"/><path d="M15 6h5v5"/></svg></span><span>Stats</span></button>
@@ -651,6 +742,7 @@ body{background-color:var(--bg)}
   <nav class="tabbar">
     <button class="tab-btn" data-action="nav" data-view="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Home</span></button>
     <button class="tab-btn" data-action="nav" data-view="calendar"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18M8 14h2m4 0h2"/></svg></span><span>Calendar</span></button>
+    <button class="tab-btn" data-action="nav" data-view="accounts"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-14 5h4m6 0h1"/></svg></span><span>Accounts</span></button>
     <button class="tab-btn" data-action="nav" data-view="weeklyNews"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18h16M5 15l4-5 3 3 7-8"/><circle cx="9" cy="10" r="1"/><circle cx="12" cy="13" r="1"/><path d="M15 5h4v4"/></svg></span><span>News</span></button>
     <button class="tab-btn" data-action="nav" data-view="journal"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14M5 10h14M5 15h9M5 20h14"/><circle cx="3" cy="5" r=".7"/><circle cx="3" cy="10" r=".7"/><circle cx="3" cy="15" r=".7"/><circle cx="3" cy="20" r=".7"/></svg></span><span>Journal</span></button>
     <button class="tab-btn" data-action="nav" data-view="stats"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 19h18M5 16l5-5 4 3 6-8"/><path d="M15 6h5v5"/></svg></span><span>Stats</span></button>
@@ -670,7 +762,7 @@ body{background-color:var(--bg)}
 const DEFAULT_GOALS={weeklyProfitTarget:0,weeklyTradeTarget:0,dailyLossLimit:0};
 function defaultSettings(){return {currency:'USD',theme:'dark',activeAccountId:'all',goals:{...DEFAULT_GOALS},weeklyReviews:{}};}
 function normalizeSettings(value){const next=Object.assign(defaultSettings(),value||{});next.activeAccountId=typeof value?.activeAccountId==='string'?value.activeAccountId:'all';next.goals=Object.assign({...DEFAULT_GOALS},value?.goals||{});next.weeklyReviews=value?.weeklyReviews&&typeof value.weeklyReviews==='object'&&!Array.isArray(value.weeklyReviews)?value.weeklyReviews:{};return next;}
-let S = { trades: [], settings: defaultSettings(), accounts: [] };
+let S = { trades: [], settings: defaultSettings(), accounts: [], dailyResults: [] };
 let user = null;
 let view = 'dashboard';
 let modal = null;
@@ -706,25 +798,38 @@ function normalizeAccounts(values,trades=[]){
     if(!/^[a-zA-Z0-9_-]{1,80}$/.test(id)||ids.has(id))id=legacyAccountId(name);
     if(ids.has(id))return;
     const kind=['personal','prop','demo'].includes(value?.kind)?value.kind:'personal';
-    const rawBalance=legacy?0:Number(value?.initialBalance||0),initialBalance=Number.isFinite(rawBalance)&&rawBalance>=0&&rawBalance<=1e12?rawBalance:0;
-    out.push({id,name,kind,initialBalance});names.add(name.toLocaleLowerCase());ids.add(id);
+    const number=(field)=>{const raw=legacy?0:Number(value?.[field]||0);return Number.isFinite(raw)&&raw>=0&&raw<=1e12?raw:0;};
+    const status=['active','passed','funded','failed','closed'].includes(value?.status)?value.status:'active';
+    const firm=typeof value?.firm==='string'?value.firm.trim().slice(0,120):'';
+    out.push({id,name,kind,firm,accountSize:number('accountSize'),initialBalance:number('initialBalance'),profitTarget:number('profitTarget'),maxDrawdown:number('maxDrawdown'),dailyLossLimit:number('dailyLossLimit'),status,archived:value?.archived===true});names.add(name.toLocaleLowerCase());ids.add(id);
   });
   return out;
 }
 function accountTypeLabel(kind){return ({personal:'Personal',prop:'Prop firm',demo:'Demo'})[kind]||'Personal';}
-function accountSizeOptionLabel(account){return account.initialBalance>0?fmtMoney(account.initialBalance):'size not set';}
+function accountSizeOptionLabel(account){return account.accountSize>0?fmtMoney(account.accountSize):account.initialBalance>0?fmtMoney(account.initialBalance):'size not set';}
 function accountForTrade(trade){return S.accounts.find(account=>account.id===trade?.accountId||account.id===legacyAccountId(trade?.account||''))||S.accounts.find(account=>account.name.toLocaleLowerCase()===String(trade?.account||'').toLocaleLowerCase())||null;}
 function tradeAccountId(trade){return String(accountForTrade(trade)?.id||trade?.accountId||legacyAccountId(trade?.account||''));}
 function tradeAccountName(trade){return accountForTrade(trade)?.name||String(trade?.account||'Unassigned account');}
-function selectedAccountId(){const id=S.settings?.activeAccountId;return S.accounts.some(account=>account.id===id)?id:'all';}
+function activeAccounts(){return S.accounts.filter(account=>!account.archived);}
+function selectedAccountId(){const id=S.settings?.activeAccountId;return activeAccounts().some(account=>account.id===id)?id:'all';}
 function selectedAccount(){const id=selectedAccountId();return id==='all'?null:S.accounts.find(account=>account.id===id)||null;}
 function selectedTrades(trades=S.trades){const id=selectedAccountId();return id==='all'?trades.slice():trades.filter(trade=>tradeAccountId(trade)===id);}
 function accountTrades(account){return S.trades.filter(trade=>tradeAccountId(trade)===account.id);}
-function accountEquity(account){return Number(account.initialBalance||0)+sumSigned(accountTrades(account));}
+function accountDailyResults(account){return (S.dailyResults||[]).filter(result=>result.accountId===account.id);}
+function accountResultPnl(account){const dates=new Set([...accountDailyResults(account).map(result=>result.date),...accountTrades(account).map(trade=>trade.date)]);return [...dates].reduce((sum,date)=>sum+effectiveAccountDay(account,date).pnl,0);}
+function accountEquity(account){return Number(account.initialBalance||0)+accountResultPnl(account);}
 function weekTrades(){const key=weekKey(),today=todayStr();return selectedTrades().filter(t=>t.date>=key&&t.date<=today);}
 function weekLabel(){const start=weekStartDate(),end=new Date(start);end.setDate(start.getDate()+6);return `${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;}
 function tradesInMonth(y,m0){ const k=monthKey(y,m0); return selectedTrades().filter(t=>t.date.slice(0,7)===k); }
 function tradesOnDay(ds){ return selectedTrades().filter(t=>t.date===ds); }
+function dailyResultsOnDay(ds){const id=selectedAccountId();return (S.dailyResults||[]).filter(result=>result.date===ds&&(id==='all'||result.accountId===id));}
+function dailyResultForAccount(ds,accountId){return (S.dailyResults||[]).find(result=>result.date===ds&&result.accountId===accountId)||null;}
+function effectiveAccountDay(account,ds){const result=dailyResultForAccount(ds,account.id);if(result)return {pnl:Number(result.pnl)||0,source:'result',result};const trades=S.trades.filter(trade=>trade.date===ds&&tradeAccountId(trade)===account.id);return trades.length?{pnl:sumSigned(trades),source:'trades',trades}:{pnl:0,source:'none'};}
+function effectiveDay(ds){const id=selectedAccountId(),accounts=id==='all'?S.accounts:S.accounts.filter(account=>account.id===id);return accounts.map(account=>({account,...effectiveAccountDay(account,ds)})).filter(item=>item.source!=='none');}
+function effectiveDayPnl(ds){return effectiveDay(ds).reduce((sum,item)=>sum+item.pnl,0);}
+function monthDayRows(y,m0){const key=monthKey(y,m0),dates=new Set();(S.dailyResults||[]).forEach(result=>{if(result.date.startsWith(key)&&(selectedAccountId()==='all'||result.accountId===selectedAccountId()))dates.add(result.date);});selectedTrades().forEach(trade=>{if(trade.date.startsWith(key))dates.add(trade.date);});return [...dates].sort().map(date=>({date,pnl:effectiveDayPnl(date)}));}
+function summarizeDays(rows){const values=rows.map(row=>Number(row.pnl)||0),grossProfit=values.filter(value=>value>0).reduce((sum,value)=>sum+value,0),grossLoss=values.filter(value=>value<0).reduce((sum,value)=>sum+value,0),wins=values.filter(value=>value>0).length,losses=values.filter(value=>value<0).length;return {net:values.reduce((sum,value)=>sum+value,0),grossProfit,grossLoss,wins,losses,winRate:wins+losses?Math.round(wins/(wins+losses)*100):0,best:values.length?Math.max(...values):0,worst:values.length?Math.min(...values):0,days:rows.length};}
+function normalizeDailyResults(values){return (Array.isArray(values)?values:[]).map(value=>({id:String(value?.id||''),accountId:String(value?.accountId||value?.account_id||''),date:String(value?.date||value?.trade_date||''),pnl:Number(value?.pnl)||0,note:typeof value?.note==='string'?value.note:''})).filter(value=>value.accountId&&/^\d{4}-\d{2}-\d{2}$/.test(value.date));}
 function signed(t){ return t.result==='profit' ? Math.abs(Number(t.amount)) : -Math.abs(Number(t.amount)); }
 function sumSigned(list){ return list.reduce((a,t)=>a+signed(t),0); }
 function performanceStats(trades){
@@ -746,18 +851,20 @@ function fmtMoney(n){
   catch(e){return (n<0?'-':'')+cur+' '+Math.abs(n).toFixed(2);}
 }
 function fmtSigned(n){ if(Math.abs(n)<0.005)return fmtMoney(0); return (n>0?'+':'')+fmtMoney(n); }
+function fmtSignedShort(n){if(Math.abs(n)<0.005)return fmtMoney(0);const cur=(S.settings&&S.settings.currency)||'USD';try{return (n>0?'+':'')+new Intl.NumberFormat('en-US',{style:'currency',currency:cur,notation:'compact',maximumFractionDigits:1}).format(n);}catch(error){return fmtSigned(n);}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,9);}
-function buildCalendarDays(y,m0){
-  const startWeekday=new Date(y,m0,1).getDay(), daysInMonth=new Date(y,m0+1,0).getDate(), cells=[];
+function buildCalendarWeeks(y,m0){
+  const startWeekday=(new Date(y,m0,1).getDay()+6)%7,daysInMonth=new Date(y,m0+1,0).getDate(),cells=[];
   for(let i=0;i<startWeekday;i++)cells.push(null);
   for(let d=1;d<=daysInMonth;d++)cells.push(d);
-  return cells;
+  while(cells.length%7)cells.push(null);
+  const weeks=[];for(let i=0;i<cells.length;i+=7)weeks.push(cells.slice(i,i+7));return weeks;
 }
 
 const OFFLINE_DB='candlex-offline-v1';
 let OFFLINE_LOCAL_STORAGE=false;
-function emptyOfflineState(){return {trades:[],settings:defaultSettings(),accounts:[]};}
+function emptyOfflineState(){return {trades:[],settings:defaultSettings(),accounts:[],dailyResults:[]};}
 function openOfflineDb(){return new Promise((resolve,reject)=>{if(!window.indexedDB){reject(new Error('IndexedDB unavailable'));return;}const req=indexedDB.open(OFFLINE_DB,1);req.onupgradeneeded=()=>req.result.createObjectStore('journal');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(new Error('IndexedDB unavailable'));});}
 async function readOfflineState(){
   try{const db=await openOfflineDb();return await new Promise((resolve,reject)=>{const tx=db.transaction('journal','readonly'),req=tx.objectStore('journal').get('state');req.onsuccess=()=>resolve(req.result||emptyOfflineState());req.onerror=()=>reject(new Error('Could not read local journal'));tx.oncomplete=()=>db.close();tx.onerror=()=>{db.close();reject(new Error('Could not read local journal'));};});}
@@ -772,8 +879,14 @@ async function offlineApi(path,method='GET',body){
   const route=new URL(path,location.href).pathname;
   if(route==='/api/session')return {user:{email:'Offline journal · this browser'}};
   const state=await readOfflineState();
-  if(route==='/api/data')return state;
+  if(route==='/api/data')return {...state,dailyResults:state.dailyResults||[]};
   if(route==='/api/settings'&&method==='PUT'){state.settings=body.settings||state.settings;state.accounts=body.accounts||state.accounts;await writeOfflineState(state);return {settings:state.settings,accounts:state.accounts};}
+  if(route==='/api/daily-results'&&method==='POST'){
+    const accountId=String(body?.accountId||''),date=String(body?.date||''),pnl=Number(body?.pnl),note=String(body?.note||'');
+    if(!state.accounts.some(account=>String(account?.id||'')===accountId)||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(pnl)||Math.abs(pnl)>999999999999.99||note.length>2000)throw new Error('Enter a valid daily result.');
+    state.dailyResults=state.dailyResults||[];const prior=state.dailyResults.find(result=>result.accountId===accountId&&result.date===date),saved={id:prior?.id||uid(),accountId,date,pnl,note:note.trim()};
+    if(prior)Object.assign(prior,saved);else state.dailyResults.push(saved);await writeOfflineState(state);return {dailyResult:saved};
+  }
   if(route==='/api/trades'&&method==='POST'){
     const id=uid(),added=(body.images||[]).map(i=>({id:uid(),name:i.name,type:i.type,url:i.data}));
     const trade={...body.trade,id,images:added};state.trades.push(trade);await writeOfflineState(state);return {trade};
@@ -815,7 +928,7 @@ async function saveWeeklyReview(form){
 async function loadUserData(){
   const data=await api('/api/data');
   const trades=Array.isArray(data.trades)?data.trades:[];
-  S={trades,settings:normalizeSettings(data.settings),accounts:normalizeAccounts(data.accounts,trades)};
+  S={trades,settings:normalizeSettings(data.settings),accounts:normalizeAccounts(data.accounts,trades),dailyResults:normalizeDailyResults(data.dailyResults)};
   applyTheme();
 }
 async function initApp(){
@@ -830,7 +943,7 @@ async function initApp(){
   if(authError)toast(authError,true);
 }
 
-function openDay(date){modal={mode:'day',date};render();}
+function openDay(date){modal={mode:'day',date,accountId:selectedAccount()?.id||activeAccounts()[0]?.id||''};render();}
 function openForm(date,trade,origin){
   modal={mode:'form',date,trade:trade||null,origin:origin||'direct',keptImageIds:trade?(trade.images||[]).map(i=>i.id):[],newImages:[]};
   render();
@@ -878,6 +991,20 @@ async function handleTradeFormSubmit(form){
     backFromForm();
   }catch(e){submit.disabled=false;submit.textContent='Save trade';toast(e.message,true);}
 }
+async function saveDailyResult(form){
+  const data=new FormData(form),accountId=String(data.get('accountId')||''),pnl=Number(data.get('pnl')),note=String(data.get('note')||''),account=S.accounts.find(item=>item.id===accountId);
+  if(!account||!/^\d{4}-\d{2}-\d{2}$/.test(modal?.date||'')){toast('Choose a valid account and date.',true);return;}
+  if(!Number.isFinite(pnl)||Math.abs(pnl)>999999999999.99||note.length>2000){toast('Enter a valid result and note.',true);return;}
+  const button=form.querySelector('[type="submit"]');if(button){button.disabled=true;button.textContent='Saving…';}
+  try{
+    const response=await api('/api/daily-results','POST',{accountId,date:modal.date,pnl,note});
+    const saved=normalizeDailyResults([response.dailyResult])[0];
+    if(!saved)throw new Error('CandleX could not confirm the saved result.');
+    S.dailyResults=S.dailyResults||[];const index=S.dailyResults.findIndex(item=>item.accountId===accountId&&item.date===modal.date);
+    if(index>=0)S.dailyResults[index]=saved;else S.dailyResults.push(saved);
+    modal.accountId=accountId;render();toast('Daily result saved.');
+  }catch(error){if(button){button.disabled=false;button.textContent=dailyResultForAccount(modal.date,accountId)?'Update daily result':'Save daily result';}toast(error.message,true);}
+}
 async function deleteTrade(id){
   if(!confirm('Delete this trade and its screenshots? This cannot be undone.'))return;
   try{
@@ -920,19 +1047,25 @@ function renderDashboard(){
   <div class="tiles">${statTile('Trades',list.length)}${statTile('Winning trades',wins,'profit')}${statTile('Losing trades',losses,'loss')}${statTile('Win rate',wr+'%')}</div>`}`;
 }
 function renderCalendar(){
-  const y=calMonth.getFullYear(),m=calMonth.getMonth(),cells=buildCalendarDays(y,m),monthLabel=calMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'}),today=todayStr(),monthTrades=tradesInMonth(y,m),monthTotal=sumSigned(monthTrades);
-  let grid=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
-  let cellIndex=0;
-  cells.forEach(d=>{
-    if(d===null){grid+='<div class="cal-cell cal-empty"></div>';return;}
-    const ds=dstr(y,m,d),dayTrades=tradesOnDay(ds),tot=sumSigned(dayTrades);
-    const tradeClass=dayTrades.length?(tot>0?'is-profit':tot<0?'is-loss':'is-flat'):'';
-    const dateLabel=new Date(ds+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-    const markers=dayTrades.slice(0,3).map(t=>`<i class="${t.result==='profit'?'is-win':'is-loss'}"></i>`).join('');
-    grid+=`<div class="cal-cell ${ds===today?'is-today':''} ${dayTrades.length?'has-trades '+tradeClass:''}" style="--cal-index:${cellIndex++}" role="button" tabindex="0" data-action="open-day" data-date="${ds}" aria-label="${esc(dateLabel)}${dayTrades.length?`, ${dayTrades.length} trades, ${fmtSigned(tot)}`:''}"><div class="cal-cell-head"><div class="cal-daynum">${d}</div>${dayTrades.length?`<div class="cal-trade-dots" aria-hidden="true">${markers}</div>`:''}</div>${dayTrades.length?`<div class="cal-pl ${plClass(tot)}">${fmtSigned(tot)}</div><div class="cal-count">${dayTrades.length} trade${dayTrades.length>1?'s':''}</div>`:''}</div>`;
+  const y=calMonth.getFullYear(),m=calMonth.getMonth(),weeks=buildCalendarWeeks(y,m),monthLabel=calMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'}),today=todayStr(),days=monthDayRows(y,m),summary=summarizeDays(days),maxAbs=Math.max(0,...days.map(row=>Math.abs(row.pnl))),weekdayLabels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const breakdown=selectedAccountId()==='all'?S.accounts.map(account=>({account,...summarizeDays(monthDayRowsForAccount(y,m,account.id))})).filter(item=>item.days>0):[];
+  const summaryCard=`<section class="month-summary card"><div class="month-summary-head"><div><div class="tool-title">${esc(monthLabel)} summary</div><p class="tool-sub">Daily results${selectedAccountId()==='all'?' across all accounts':` · ${esc(selectedAccount()?.name||'')}`}</p></div><div class="month-net ${plClass(summary.net)}">${fmtSigned(summary.net)}<span>Net P/L</span></div></div><div class="month-metrics">${statTile('Gross profit',fmtMoney(summary.grossProfit),'profit')}${statTile('Gross loss',fmtSigned(summary.grossLoss),'loss')}${statTile('Winning days',summary.wins,'profit')}${statTile('Losing days',summary.losses,'loss')}${statTile('Win rate',summary.winRate+'%')}${statTile('Best day',fmtSigned(summary.best),plClass(summary.best))}${statTile('Worst day',fmtSigned(summary.worst),plClass(summary.worst))}</div>${breakdown.length?`<div class="account-breakdown"><strong>By account</strong>${breakdown.map(item=>`<div><span>${esc(item.account.name)}</span><span class="${plClass(item.net)}">${fmtSigned(item.net)} <small>${item.wins}W · ${item.losses}L</small></span></div>`).join('')}</div>`:''}</section>`;
+  let cellIndex=0,grid=`<div class="cal-weekdays">${weekdayLabels.map(day=>`<div class="cal-dow">${day}</div>`).join('')}<div class="cal-dow weekly-heading">Week</div></div>`;
+  weeks.forEach((week,weekIndex)=>{
+    let weekTotal=0,weekCells='';
+    week.forEach(day=>{
+      if(day===null){weekCells+='<div class="cal-cell cal-empty" aria-hidden="true"></div>';return;}
+      const ds=dstr(y,m,day),dayData=effectiveDay(ds),pnl=dayData.reduce((sum,item)=>sum+item.pnl,0),hasData=dayData.length>0,alpha=hasData?Math.max(.08,Math.min(.42,.08+.34*Math.abs(pnl)/(maxAbs||1))):0,classes=hasData?(pnl>0?'is-profit':pnl<0?'is-loss':'is-flat'):'';
+      const label=new Date(`${ds}T00:00:00`).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}),count=dayData.filter(item=>item.source==='trades').reduce((sum,item)=>sum+(item.trades?.length||0),0),type=dayData.some(item=>item.source==='result')?'daily result':`${count} trade${count===1?'':'s'}`;
+      weekTotal+=pnl;
+      weekCells+=`<div class="cal-cell ${ds===today?'is-today':''} ${hasData?'has-data '+classes:''}" style="--pnl-alpha:${alpha};--cal-index:${cellIndex++}" role="button" tabindex="0" data-action="open-day" data-date="${ds}" aria-label="${esc(label)}${hasData?`, ${fmtSigned(pnl)}, ${type}`:', no result'}"><div class="cal-cell-head"><div class="cal-daynum">${day}</div><span class="cal-cell-marker" aria-hidden="true">${hasData?'•':''}</span></div>${hasData?`<div class="cal-pl ${plClass(pnl)}"><span class="cal-full-value">${fmtSigned(pnl)}</span><span class="cal-short-value">${fmtSignedShort(pnl)}</span></div><div class="cal-count">${esc(type)}</div>`:''}</div>`;
+    });
+    grid+=`<div class="cal-week" style="--week-index:${weekIndex}">${weekCells}<div class="cal-week-total"><span>Week</span><strong class="${plClass(weekTotal)}">${fmtSigned(weekTotal)}</strong></div></div>`;
   });
-  return `<div class="page-head"><div><h1>Trading Calendar</h1><p class="sub">Your trading rhythm, one day at a time</p></div><button class="btn btn-primary" data-action="add-trade">+ Add trade</button></div><div class="cal-nav"><button class="cal-arrow" type="button" data-action="cal-prev" aria-label="Previous month">‹</button><div class="cal-month"><strong>${esc(monthLabel)}</strong><span>${monthTrades.length} trade${monthTrades.length===1?'':'s'} <i>·</i> <b class="${plClass(monthTotal)}">${fmtSigned(monthTotal)}</b></span></div><button class="cal-arrow" type="button" data-action="cal-next" aria-label="Next month">›</button></div><div class="cal-grid">${grid}</div>${selectedTrades().length===0?'<p class="hint">Click any day to log your first trade.</p>':''}`;
+  const dayCount=days.length,scope=selectedAccount()?.name||'All accounts';
+  return `<div class="page-head"><div><h1>Trading Calendar</h1><p class="sub">${esc(scope)} · Record and review daily results</p></div><button class="btn btn-primary" data-action="add-trade">+ Add trade</button></div>${summaryCard}<div class="cal-nav"><button class="cal-arrow" type="button" data-action="cal-prev" aria-label="Previous month">‹</button><div class="cal-month"><strong>${esc(monthLabel)}</strong><span>${dayCount} recorded day${dayCount===1?'':'s'} <i>·</i> <b class="${plClass(summary.net)}">${fmtSigned(summary.net)}</b></span></div><div class="cal-nav-actions"><button class="btn btn-secondary cal-today" type="button" data-action="cal-today">Today</button><button class="cal-arrow" type="button" data-action="cal-next" aria-label="Next month">›</button></div></div><div class="cal-grid">${grid}</div>${dayCount===0?'<p class="hint">Choose a day to add a result, or create an account first.</p>':''}`;
 }
+function monthDayRowsForAccount(y,m0,accountId){const key=monthKey(y,m0),dates=new Set();(S.dailyResults||[]).forEach(result=>{if(result.date.startsWith(key)&&result.accountId===accountId)dates.add(result.date);});S.trades.forEach(trade=>{if(trade.date.startsWith(key)&&tradeAccountId(trade)===accountId)dates.add(trade.date);});const account=S.accounts.find(item=>item.id===accountId);return [...dates].sort().map(date=>({date,pnl:account?effectiveAccountDay(account,date).pnl:0}));}
 function noteSummary(t){return [t.marketConditions,t.rationale,t.lessons,t.notes].filter(Boolean).join(' · ');}
 function tradeRowHtml(t){
   const imgs=t.images||[],tags=(t.tags||[]).slice(0,3).map(x=>`<span class="badge">${esc(x)}</span>`).join('');
@@ -992,7 +1125,7 @@ function renderJournal(){
     '<label class="journal-filter-field"><span>Tag</span><select class="input" id="journalTag" data-journal-filter="tag">'+journalSelectOptions(tags,journalFilters.tag,'All tags')+'</select></label>'+
     '</div><div class="journal-summary" id="journalSummary" aria-live="polite">'+summary+'</div><div id="journalResults">'+journalResultsHtml(list,base.length)+'</div></section>';
 }
-function dailyLossAmount(){return selectedTrades().filter(t=>t.date===todayStr()).reduce((sum,t)=>sum+Math.max(0,-signed(t)),0);}
+function dailyLossAmount(){return effectiveDay(todayStr()).reduce((sum,item)=>sum+Math.max(0,-item.pnl),0);}
 function goalProgress(label,current,target,format){
   if(!(target>0))return `<div class="goal-progress"><div class="goal-progress-head"><span>${esc(label)}</span><button class="text-button" type="button" data-action="nav" data-view="settings">Set goal</button></div><p class="field-help">Add a target in Settings to track progress.</p></div>`;
   const percent=Math.max(0,Math.min(100,current/target*100));
@@ -1001,7 +1134,7 @@ function goalProgress(label,current,target,format){
 function riskResultHtml(){
   const balance=Number(riskDraft.balance||selectedAccount()?.initialBalance||0),riskPercent=Number(riskDraft.riskPercent),entry=Number(riskDraft.entry),stop=Number(riskDraft.stop),target=Number(riskDraft.target),pointValue=Number(riskDraft.pointValue);
   const hasBudget=Number.isFinite(balance)&&balance>0&&Number.isFinite(riskPercent)&&riskPercent>0&&riskPercent<=100;
-  const budget=hasBudget?balance*riskPercent/100:0,limit=Number(S.settings.goals?.dailyLossLimit)||0,todayLoss=dailyLossAmount(),remaining=limit>0?Math.max(0,limit-todayLoss):null;
+  const budget=hasBudget?balance*riskPercent/100:0,limit=Number(selectedAccount()?.dailyLossLimit||S.settings.goals?.dailyLossLimit)||0,todayLoss=dailyLossAmount(),remaining=limit>0?Math.max(0,limit-todayLoss):null;
   const allowed=limit>0?Math.min(budget,remaining):budget,distance=Math.abs(entry-stop),correctStop=riskDraft.direction==='long'?stop<entry:stop>entry;
   const validPrices=Number.isFinite(entry)&&entry>0&&Number.isFinite(stop)&&stop>0&&distance>0&&correctStop&&Number.isFinite(pointValue)&&pointValue>0;
   const perUnit=validPrices?distance*pointValue:0,units=hasBudget&&validPrices&&perUnit>0?allowed/perUnit:null;
@@ -1023,7 +1156,7 @@ function riskResultHtml(){
   </div><div class="${alertClass}" role="status">${esc(message)}</div>`;
 }
 function renderRiskCalculator(){
-  const d=riskDraft,limit=Number(S.settings.goals?.dailyLossLimit)||0,loss=dailyLossAmount(),defaultBalance=selectedAccount()?.initialBalance||'';
+  const d=riskDraft,limit=Number(selectedAccount()?.dailyLossLimit||S.settings.goals?.dailyLossLimit)||0,loss=dailyLossAmount(),defaultBalance=selectedAccount()?.initialBalance||'';
   return `<section class="card risk-card"><div class="tool-title">Risk calculator</div><p class="tool-sub">Plan your position size before a trade. The daily loss limit uses today’s logged losses and caps the remaining risk budget.</p>
     <div class="risk-fields">
       <div><label class="field-label" for="riskBalance">Account balance (${esc(S.settings.currency||'USD')})</label><input class="input" id="riskBalance" type="number" inputmode="decimal" min="0.01" step="any" placeholder="e.g. 10000" value="${esc(d.balance||defaultBalance)}"></div>
@@ -1065,23 +1198,26 @@ function renderChart(){
 }
 function discordIcon(){return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.73 5.09a19.28 19.28 0 0 0-4.76-1.47.07.07 0 0 0-.08.04c-.2.35-.43.82-.59 1.19a17.78 17.78 0 0 0-5.3 0c-.16-.38-.4-.84-.6-1.19a.08.08 0 0 0-.08-.04 19.23 19.23 0 0 0-4.76 1.47.07.07 0 0 0-.03.03C.51 9.54-.32 13.86.1 18.13a.08.08 0 0 0 .03.05 19.42 19.42 0 0 0 5.84 2.95.08.08 0 0 0 .09-.03c.45-.62.85-1.28 1.19-1.98a.08.08 0 0 0-.04-.1 12.8 12.8 0 0 1-1.82-.87.08.08 0 0 1-.01-.13l.37-.29a.07.07 0 0 1 .08-.01c3.83 1.75 7.98 1.75 11.76 0a.07.07 0 0 1 .08.01l.37.29a.08.08 0 0 1-.01.13c-.58.34-1.19.63-1.82.87a.08.08 0 0 0-.04.1c.35.7.75 1.36 1.19 1.98a.08.08 0 0 0 .09.03 19.36 19.36 0 0 0 5.85-2.95.08.08 0 0 0 .03-.05c.5-4.94-.84-9.23-3.55-13.01a.06.06 0 0 0-.03-.03ZM8.02 14.86c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Zm7.96 0c-1.15 0-2.1-1.06-2.1-2.36 0-1.3.93-2.36 2.1-2.36 1.18 0 2.13 1.07 2.1 2.36 0 1.3-.93 2.36-2.1 2.36Z"/></svg>`;}
 function accountKindSelect(id,name,value){return `<select class="input" ${id?`id="${esc(id)}"`:''} name="${esc(name)}" required><option value="personal" ${value==='personal'?'selected':''}>Personal</option><option value="prop" ${value==='prop'?'selected':''}>Prop firm</option><option value="demo" ${value==='demo'?'selected':''}>Demo</option></select>`;}
+function accountStatusLabel(status){return ({active:'Active',passed:'Passed',funded:'Funded',failed:'Failed',closed:'Closed'})[status]||'Active';}
+function accountStatusSelect(value){return `<select class="input" name="status" required>${['active','passed','funded','failed','closed'].map(status=>`<option value="${status}" ${value===status?'selected':''}>${accountStatusLabel(status)}</option>`).join('')}</select>`;}
 function renderAccountManager(){
   if(!S.accounts.length)return '<p class="field-help">Create your first account to keep its starting capital and trades together.</p>';
   return `<div class="account-list">${S.accounts.map(account=>{
-    const trades=accountTrades(account),pnl=sumSigned(trades),balance=Number(account.initialBalance)||0;
-    return `<article class="account-card"><div class="account-card-head"><div><span class="account-kind">${esc(accountTypeLabel(account.kind))}</span><h3>${esc(account.name)}</h3></div><div class="account-card-pnl ${plClass(pnl)}">${fmtSigned(pnl)}<span>net P/L</span></div></div>
-      <div class="account-card-stats"><div><span>Starting capital</span><strong>${balance>0?fmtMoney(balance):'Not set'}</strong></div><div><span>Current balance</span><strong>${balance>0?fmtMoney(accountEquity(account)):'—'}</strong></div><div><span>Logged trades</span><strong>${trades.length}</strong></div></div>
-      <form class="account-meta-form" data-account-id="${esc(account.id)}"><label><span>Account name</span><input class="input" name="name" maxlength="80" value="${esc(account.name)}" required></label><label><span>Type</span>${accountKindSelect('','kind',account.kind)}</label><label><span>Starting capital (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="initialBalance" min="0" max="1000000000000" step="any" value="${balance}" required></label><button class="btn btn-secondary" type="submit">Save</button></form>
-      <div class="account-card-foot">${trades.length?`<span class="field-help">Linked to ${trades.length} trade${trades.length===1?'':'s'}</span>`:`<button type="button" class="text-button" data-action="remove-account" data-id="${esc(account.id)}">Remove account</button>`}</div></article>`;
+    const trades=accountTrades(account),results=accountDailyResults(account),pnl=accountResultPnl(account),balance=Number(account.initialBalance)||0,target=Number(account.profitTarget)||0,used=Math.max(0,-pnl),drawdown=Number(account.maxDrawdown)||0,remaining=drawdown?Math.max(0,drawdown-used):null,progress=target?Math.max(0,Math.min(100,pnl/target*100)):0,hasActivity=trades.length>0||results.length>0;
+    return `<article class="account-card ${account.archived?'is-archived':''}"><div class="account-card-head"><div><span class="account-kind">${esc(accountTypeLabel(account.kind))}</span><span class="status-badge status-${esc(account.status)}">${esc(account.archived?'Archived':accountStatusLabel(account.status))}</span><h3>${esc(account.name)}</h3>${account.firm?`<p class="account-firm">${esc(account.firm)}</p>`:''}</div><div class="account-card-pnl ${plClass(pnl)}">${fmtSigned(pnl)}<span>net result</span></div></div>
+      <div class="account-card-stats"><div><span>Current balance</span><strong>${balance>0?fmtMoney(accountEquity(account)):'—'}</strong></div><div><span>Target distance</span><strong>${target?fmtMoney(Math.max(0,target-pnl)):'—'}</strong></div><div><span>Drawdown room</span><strong>${remaining===null?'—':fmtMoney(remaining)}</strong></div></div>
+      ${target?`<div class="account-progress"><div><span>Profit target</span><strong>${fmtMoney(pnl)} / ${fmtMoney(target)}</strong></div><div class="progress-track" role="progressbar" aria-label="${esc(account.name)} profit target progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(progress)}"><div class="progress-fill" style="width:${progress}%"></div></div></div>`:''}
+      <form class="account-meta-form" data-account-id="${esc(account.id)}"><label><span>Account name</span><input class="input" name="name" maxlength="80" value="${esc(account.name)}" required></label><label><span>Type</span>${accountKindSelect('','kind',account.kind)}</label><label><span>Prop firm</span><input class="input" name="firm" maxlength="120" value="${esc(account.firm)}" placeholder="Optional"></label><label><span>Account size (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="accountSize" min="0" max="1000000000000" step="any" value="${account.accountSize||0}"></label><label><span>Starting balance (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="initialBalance" min="0" max="1000000000000" step="any" value="${balance}" required></label><label><span>Profit target (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="profitTarget" min="0" max="1000000000000" step="any" value="${account.profitTarget||0}"></label><label><span>Max drawdown (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="maxDrawdown" min="0" max="1000000000000" step="any" value="${account.maxDrawdown||0}"></label><label><span>Daily loss limit (${esc(S.settings.currency||'USD')})</span><input class="input" type="number" name="dailyLossLimit" min="0" max="1000000000000" step="any" value="${account.dailyLossLimit||0}"></label><label><span>Status</span>${accountStatusSelect(account.status)}</label><button class="btn btn-secondary" type="submit">Save account</button></form>
+      <div class="account-card-foot"><span class="field-help">${trades.length} trade${trades.length===1?'':'s'} · ${results.length} result day${results.length===1?'':'s'}</span><div><button type="button" class="text-button" data-action="toggle-account-archive" data-id="${esc(account.id)}">${account.archived?'Restore account':'Archive account'}</button>${hasActivity?'':` <button type="button" class="text-button account-delete" data-action="remove-account" data-id="${esc(account.id)}">Delete</button>`}</div></div></article>`;
   }).join('')}</div>`;
 }
+function renderAccounts(){return `<div class="page-head"><div><h1>Accounts</h1><p class="sub">Track balances, targets, drawdown limits, and account status.</p></div></div><section class="card account-manager"><div class="tool-title">Add trading account</div><p class="tool-sub">Personal, prop firm, and demo accounts are supported.</p><form id="accountForm" class="account-create-form"><label><span>Account name</span><input class="input" id="accountName" name="name" maxlength="80" placeholder="e.g. FTMO 50K" required></label><label><span>Type</span>${accountKindSelect('accountKind','kind','personal')}</label><label><span>Prop firm</span><input class="input" id="accountFirm" name="firm" maxlength="120" placeholder="Optional"></label><label><span>Account size (${esc(S.settings.currency||'USD')})</span><input class="input" id="accountSize" name="accountSize" type="number" min="0" max="1000000000000" step="any" placeholder="50,000"></label><label><span>Starting balance (${esc(S.settings.currency||'USD')})</span><input class="input" id="accountBalance" name="initialBalance" type="number" min="0" max="1000000000000" step="any" placeholder="50,000" required></label><label><span>Profit target (${esc(S.settings.currency||'USD')})</span><input class="input" name="profitTarget" type="number" min="0" max="1000000000000" step="any" placeholder="Optional"></label><label><span>Max drawdown (${esc(S.settings.currency||'USD')})</span><input class="input" name="maxDrawdown" type="number" min="0" max="1000000000000" step="any" placeholder="Optional"></label><label><span>Daily loss limit (${esc(S.settings.currency||'USD')})</span><input class="input" name="dailyLossLimit" type="number" min="0" max="1000000000000" step="any" placeholder="Optional"></label><label><span>Status</span>${accountStatusSelect('active')}</label><button class="btn btn-primary" type="submit">+ Add account</button></form>${renderAccountManager()}</section>`;}
 function renderSettings(){
   const cur=S.settings.currency||'USD',theme=S.settings.theme||'dark';
   return `<div class="page-head"><div><h1>Settings</h1><p class="sub">Your preferences and account setup</p></div></div>
   <div class="card"><label class="field-label">Currency</label><select class="input" id="currencySelect">${CURRENCIES.map(c=>`<option value="${c}" ${c===cur?'selected':''}>${c}</option>`).join('')}</select></div>
   <form class="card" id="goalsForm"><div class="tool-title">Risk limits &amp; weekly goals</div><p class="tool-sub">Save personal limits to your journal. Leave a value at zero to turn that goal off.</p><div class="setting-goals"><div><label class="field-label" for="goalDailyLoss">Daily loss limit (${esc(cur)})</label><input class="input" id="goalDailyLoss" type="number" min="0" max="1000000000" step="any" value="${esc(S.settings.goals?.dailyLossLimit||0)}" required></div><div><label class="field-label" for="goalWeeklyProfit">Weekly profit target (${esc(cur)})</label><input class="input" id="goalWeeklyProfit" type="number" min="0" max="1000000000" step="any" value="${esc(S.settings.goals?.weeklyProfitTarget||0)}" required></div><div><label class="field-label" for="goalWeeklyTrades">Weekly trade target</label><input class="input" id="goalWeeklyTrades" type="number" min="0" max="10000" step="1" value="${esc(S.settings.goals?.weeklyTradeTarget||0)}" required></div></div><div class="review-save"><button class="btn btn-primary" type="submit">Save limits &amp; goals</button></div></form>
   <div class="card"><label class="field-label">Theme</label><div class="seg"><button type="button" class="seg-btn ${theme==='dark'?'active':''}" data-action="set-theme" data-theme="dark">Dark</button><button type="button" class="seg-btn ${theme==='light'?'active':''}" data-action="set-theme" data-theme="light">Light</button></div></div>
-  <section class="card account-manager"><div class="tool-title">Trading accounts</div><p class="tool-sub">Set each account’s type and starting capital, then choose an account from the selector above the journal.</p><form id="accountForm" class="account-create-form"><label><span>Account name</span><input class="input" id="accountName" name="name" maxlength="80" placeholder="e.g. FTMO 50K" required></label><label><span>Type</span>${accountKindSelect('accountKind','kind','personal')}</label><label><span>Starting capital (${esc(cur)})</span><input class="input" id="accountBalance" name="initialBalance" type="number" min="0.01" max="1000000000000" step="any" placeholder="50,000" required></label><button class="btn btn-primary" type="submit">+ Add account</button></form>${renderAccountManager()}</section>
   <div class="card"><label class="field-label">Export</label><p class="sub" style="margin-bottom:10px">Download all your trades and notes as a CSV file.</p><button type="button" class="btn btn-secondary" data-action="export-csv">Export CSV</button></div>`;
 }
 
@@ -1139,7 +1275,7 @@ function renderWeeklyNews(){
  </section>`;
 }
 
-const PAGES={dashboard:renderDashboard,calendar:renderCalendar,journal:renderJournal,stats:renderStats,deals:()=>renderDeals(false),weeklyNews:renderWeeklyNews,settings:renderSettings};
+const PAGES={dashboard:renderDashboard,calendar:renderCalendar,accounts:renderAccounts,journal:renderJournal,stats:renderStats,deals:()=>renderDeals(false),weeklyNews:renderWeeklyNews,settings:renderSettings};
 
 function renderAuth(){
   const registering=authMode==='register';
@@ -1175,8 +1311,9 @@ function renderFormModal(){
   <div class="modal-foot">${t?`<button type="button" class="btn btn-danger" data-action="delete-trade" data-id="${esc(t.id)}">Delete</button>`:'<span></span>'}<div style="display:flex;gap:8px"><button type="button" class="btn btn-ghost" data-action="cancel-form">Cancel</button><button type="submit" class="btn btn-primary">Save trade</button></div></div></form></div></div>`;
 }
 function renderDayModal(){
-  const list=tradesOnDay(modal.date).slice().sort((a,b)=>a.id.localeCompare(b.id)),tot=sumSigned(list),label=new Date(modal.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}),rows=list.length?list.map(tradeRowHtml).join(''):'<p class="sub" style="padding:8px 0">No trades on this day yet.</p>';
-  return `<div class="modal-backdrop" data-action="close-modal"><div class="modal" data-stop><div class="modal-head"><div><div class="modal-title">${esc(label)}</div><div class="sub ${plClass(tot)}">${list.length?fmtSigned(tot)+' · '+list.length+' trade'+(list.length>1?'s':''):'No trades'}</div></div><button class="icon-btn" data-action="close-modal" aria-label="Close">✕</button></div><div class="modal-body">${rows}</div><div class="modal-foot"><span></span><button type="button" class="btn btn-primary" data-action="add-trade-day" data-date="${esc(modal.date)}">+ Add trade</button></div></div></div>`;
+  const list=tradesOnDay(modal.date).slice().sort((a,b)=>a.id.localeCompare(b.id)),dayItems=effectiveDay(modal.date),tot=dayItems.reduce((sum,item)=>sum+item.pnl,0),label=new Date(modal.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}),rows=list.length?list.map(tradeRowHtml).join(''):'<p class="sub" style="padding:8px 0">No trades were logged on this day.</p>',target=activeAccounts().find(account=>account.id===modal.accountId)||selectedAccount()||activeAccounts()[0],saved=target?dailyResultForAccount(modal.date,target.id):null;
+  const editor=!activeAccounts().length?`<div class="empty"><div class="empty-title">Add an account first</div><div class="empty-body">Daily results are saved against an account.</div><button type="button" class="btn btn-primary" data-action="nav" data-view="accounts">Create account</button></div>`:`<form id="dailyResultForm" class="daily-result-form"><label class="field-label" for="dayAccountSelect">Trading account</label><select class="input" id="dayAccountSelect" name="accountId" required>${activeAccounts().map(account=>`<option value="${esc(account.id)}" ${account.id===target?.id?'selected':''}>${esc(account.name)}</option>`).join('')}</select><label class="field-label" for="dailyPnl">Net result (${esc(S.settings.currency||'USD')})</label><input class="input" id="dailyPnl" name="pnl" type="number" step="0.01" inputmode="decimal" value="${saved?esc(saved.pnl):''}" placeholder="Positive for a win, negative for a loss" required><label class="field-label" for="dailyNote">Note <span class="field-help">Optional · up to 2,000 characters</span></label><textarea class="input" id="dailyNote" name="note" rows="3" maxlength="2000" placeholder="A short note about the day">${esc(saved?.note||'')}</textarea><button class="btn btn-primary" type="submit">${saved?'Update daily result':'Save daily result'}</button><span class="daily-save-feedback" role="status" aria-live="polite">${saved?'Saved for '+esc(target?.name||'account'):''}</span></form>`;
+  return `<div class="modal-backdrop day-modal-backdrop" data-action="close-modal"><aside class="modal day-panel" data-stop aria-labelledby="dayPanelTitle"><div class="modal-head"><div><div class="modal-title" id="dayPanelTitle">${esc(label)}</div><div class="sub ${plClass(tot)}">${dayItems.length?`${fmtSigned(tot)} · daily P/L`:'No result yet'}</div></div><button class="icon-btn" data-action="close-modal" aria-label="Close">✕</button></div><div class="modal-body day-panel-body"><section><div class="tool-title">Daily result</div><p class="tool-sub">One result per account and day. Use a minus sign for a loss.</p>${editor}</section><section class="day-trades"><div class="tool-title">Trades</div>${rows}<button type="button" class="btn btn-secondary" data-action="add-trade-day" data-date="${esc(modal.date)}">+ Add trade</button></section></div></aside></div>`;
 }
 function renderTradeDetail(){
   const t=modal.trade,images=t.images||[],tags=t.tags||[],emotions=t.emotions||[];
@@ -1200,7 +1337,7 @@ function updateNavActive(){document.querySelectorAll('[data-action=nav]').forEac
 function renderApp(){document.getElementById('app').innerHTML=PAGES[view]();updateNavActive();if(view==='stats')requestAnimationFrame(renderChart);if(view==='deals')loadPropFirmDeals();if(view==='weeklyNews')requestAnimationFrame(()=>window.CandleXNews?.render());}
 function renderAccountBar(){
   const email=window.CandleXHosted?.enabled?esc(user.email||'CandleX account'):'Offline journal · saved in this browser',selected=selectedAccountId();
-  const picker=S.accounts.length?`<label class="account-picker"><span>ACCOUNT VIEW</span><select class="input" id="activeAccountSelect" aria-label="Choose trading account"><option value="all" ${selected==='all'?'selected':''}>All accounts</option>${S.accounts.map(account=>`<option value="${esc(account.id)}" ${selected===account.id?'selected':''}>${esc(account.name)} · ${esc(accountSizeOptionLabel(account))}</option>`).join('')}</select></label>`:`<button type="button" class="account-create-link" data-action="nav" data-view="settings">+ Create your first trading account</button>`;
+  const picker=activeAccounts().length?`<label class="account-picker"><span>ACCOUNT VIEW</span><select class="input" id="activeAccountSelect" aria-label="Choose trading account"><option value="all" ${selected==='all'?'selected':''}>All accounts</option>${activeAccounts().map(account=>`<option value="${esc(account.id)}" ${selected===account.id?'selected':''}>${esc(account.name)} · ${esc(accountSizeOptionLabel(account))}</option>`).join('')}</select></label>`:`<button type="button" class="account-create-link" data-action="nav" data-view="accounts">+ Create your first trading account</button>`;
   return `<span class="user-email">${email}</span>${picker}<button class="btn btn-ghost" data-action="sign-out">Sign out</button>`;
 }
 function render(){
@@ -1242,15 +1379,15 @@ function addTag(value){
   if(existing.length>=30){toast('A trade can have up to 30 tags.',true);return;}
   holder.insertAdjacentHTML('beforeend',tagChipHtml(tag));
 }
-async function addAccount(name,kind,balance,selectInForm){
-  const label=String(name||'').trim(),capital=Number(balance);
+async function addAccount(values,selectInForm=false){
+  const label=String(values?.name||'').trim(),kind=String(values?.kind||'personal'),capital=Number(values?.initialBalance||0),accountSize=Number(values?.accountSize||0),profitTarget=Number(values?.profitTarget||0),maxDrawdown=Number(values?.maxDrawdown||0),dailyLossLimit=Number(values?.dailyLossLimit||0),firm=String(values?.firm||'').trim(),status=String(values?.status||'active');
   if(!label){toast('Enter an account name.',true);return false;}
   if(label.length>80){toast('Trading account names can be up to 80 characters.',true);return false;}
   if(S.accounts.some(account=>account.name.toLocaleLowerCase()===label.toLocaleLowerCase())){toast('That trading account already exists.',true);return false;}
-  if(!['personal','prop','demo'].includes(kind)){toast('Choose an account type.',true);return false;}
-  if(!Number.isFinite(capital)||capital<=0||capital>1e12){toast('Enter a starting capital greater than zero.',true);return false;}
+  if(!['personal','prop','demo'].includes(kind)||!['active','passed','funded','failed','closed'].includes(status)){toast('Choose valid account type and status.',true);return false;}
+  if(![capital,accountSize,profitTarget,maxDrawdown,dailyLossLimit].every(value=>Number.isFinite(value)&&value>=0&&value<=1e12)||firm.length>120){toast('Enter valid account amounts and a prop firm name up to 120 characters.',true);return false;}
   if(S.accounts.length>=100){toast('You can save up to 100 trading accounts.',true);return false;}
-  const account={id:uid(),name:label,kind,initialBalance:capital},previousSelection=S.settings.activeAccountId||'all',firstAccount=S.accounts.length===0;
+  const account={id:uid(),name:label,kind,firm,accountSize,initialBalance:capital,profitTarget,maxDrawdown,dailyLossLimit,status,archived:false},previousSelection=S.settings.activeAccountId||'all',firstAccount=activeAccounts().length===0;
   S.accounts.push(account);if(firstAccount)S.settings.activeAccountId=account.id;
   try{
     await persistSettings();
@@ -1261,11 +1398,11 @@ async function addAccount(name,kind,balance,selectInForm){
 }
 async function updateAccount(form){
   const account=S.accounts.find(item=>item.id===form.dataset.accountId);if(!account)return;
-  const data=new FormData(form),name=String(data.get('name')||'').trim(),kind=String(data.get('kind')||''),initialBalance=Number(data.get('initialBalance'));
+  const data=new FormData(form),name=String(data.get('name')||'').trim(),kind=String(data.get('kind')||''),firm=String(data.get('firm')||'').trim(),initialBalance=Number(data.get('initialBalance')),accountSize=Number(data.get('accountSize')||0),profitTarget=Number(data.get('profitTarget')||0),maxDrawdown=Number(data.get('maxDrawdown')||0),dailyLossLimit=Number(data.get('dailyLossLimit')||0),status=String(data.get('status')||'');
   if(!name||name.length>80){toast('Enter an account name up to 80 characters.',true);return;}
   if(S.accounts.some(item=>item.id!==account.id&&item.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('That trading account already exists.',true);return;}
-  if(!['personal','prop','demo'].includes(kind)||!Number.isFinite(initialBalance)||initialBalance<0||initialBalance>1e12){toast('Enter valid account details.',true);return;}
-  const old={...account};Object.assign(account,{name,kind,initialBalance});if(journalFilters.account===old.name)journalFilters.account=name;
+  if(!['personal','prop','demo'].includes(kind)||!['active','passed','funded','failed','closed'].includes(status)||firm.length>120||![initialBalance,accountSize,profitTarget,maxDrawdown,dailyLossLimit].every(value=>Number.isFinite(value)&&value>=0&&value<=1e12)){toast('Enter valid account details.',true);return;}
+  const old={...account};Object.assign(account,{name,kind,firm,initialBalance,accountSize,profitTarget,maxDrawdown,dailyLossLimit,status});if(journalFilters.account===old.name)journalFilters.account=name;
   try{await persistSettings();render();toast('Trading account updated.');}
   catch(error){Object.assign(account,old);if(journalFilters.account===name)journalFilters.account=old.name;toast(error.message,true);}
 }
@@ -1282,7 +1419,7 @@ async function handleAuthSubmit(form){
 }
 async function signOut(){
   try{await api('/api/auth/logout','POST',{});}catch(e){}
-  user=null;S={trades:[],settings:defaultSettings(),accounts:[]};modal=null;authMode='login';authError='';authMessage='';render();
+  user=null;S={trades:[],settings:defaultSettings(),accounts:[],dailyResults:[]};modal=null;authMode='login';authError='';authMessage='';render();
 }
 function showImage(image,returnModal){modal={mode:'image',image,returnModal};render();}
 
@@ -1308,17 +1445,22 @@ document.addEventListener('click',async e=>{
   else if(a==='cancel-form'){backFromForm();}
   else if(a==='cal-prev'){calMonth.setMonth(calMonth.getMonth()-1);render();}
   else if(a==='cal-next'){calMonth.setMonth(calMonth.getMonth()+1);render();}
+  else if(a==='cal-today'){calMonth=new Date();calMonth.setDate(1);render();}
   else if(a==='clear-journal-filters'){journalFilters.search='';journalFilters.account='';journalFilters.direction='';journalFilters.result='';journalFilters.tag='';render();}
   else if(a==='set-theme'){const prior=S.settings.theme;S.settings.theme=el.dataset.theme;applyTheme();try{await persistSettings();render();}catch(err){S.settings.theme=prior;applyTheme();toast(err.message,true);}}
   else if(a==='export-csv'){exportCsv();}
   else if(a==='copy-csv'){navigator.clipboard.writeText(modal.text).then(()=>toast('Copied to clipboard.')).catch(()=>toast('Could not copy — select the text and copy manually.',true));}
   else if(a==='toggle-emotion'){const pressed=el.getAttribute('aria-pressed')==='true';el.setAttribute('aria-pressed',String(!pressed));}
   else if(a==='remove-tag'){el.closest('[data-chip]')?.remove();}
-  else if(a==='add-account-form'){await addAccount(document.getElementById('f-new-account')?.value||'',document.getElementById('f-new-account-kind')?.value||'personal',document.getElementById('f-new-account-balance')?.value||'',true);}
+  else if(a==='add-account-form'){await addAccount({name:document.getElementById('f-new-account')?.value||'',kind:document.getElementById('f-new-account-kind')?.value||'personal',initialBalance:document.getElementById('f-new-account-balance')?.value||''},true);}
+  else if(a==='toggle-account-archive'){
+    const account=S.accounts.find(item=>item.id===el.dataset.id);if(!account)return;const old=account.archived,previous=S.settings.activeAccountId||'all';account.archived=!old;if(account.archived&&previous===account.id)S.settings.activeAccountId='all';
+    try{await persistSettings();render();toast(account.archived?'Account archived.':'Account restored.');}catch(error){account.archived=old;S.settings.activeAccountId=previous;toast(error.message,true);}
+  }
   else if(a==='remove-account'){
     const index=S.accounts.findIndex(account=>account.id===el.dataset.id),old=S.accounts[index];if(!old)return;
-    if(accountTrades(old).length){toast('This account has trades and can’t be removed.',true);return;}
-    if(!confirm(`Remove ${old.name}? This only removes the empty account.`))return;
+    if(accountTrades(old).length||accountDailyResults(old).length){toast('Archive this account to keep its trades and daily results.',true);return;}
+    if(!confirm(`Delete ${old.name}? This account has no trades or daily results.`))return;
     const previousSelection=S.settings.activeAccountId||'all';S.accounts.splice(index,1);if(previousSelection===old.id)S.settings.activeAccountId='all';
     try{await persistSettings();render();toast('Trading account removed.');}catch(err){S.accounts.splice(index,0,old);S.settings.activeAccountId=previousSelection;toast(err.message,true);}
   }
@@ -1344,6 +1486,8 @@ document.addEventListener('change',async e=>{
     try{await persistSettings();render();}
     catch(err){S.settings.activeAccountId=previous;render();toast(err.message,true);}
     return;
+  }else if(e.target.id==='dayAccountSelect'&&modal?.mode==='day'){
+    modal.accountId=e.target.value;render();return;
   }else if(e.target.matches('[data-journal-filter]')){
     const field=e.target.dataset.journalFilter;journalFilters[field]=e.target.value;
     if(field==='scope')render();else updateJournalResults();
@@ -1359,7 +1503,8 @@ document.addEventListener('change',async e=>{
 document.addEventListener('submit',async e=>{
   if(e.target.id==='authForm'){e.preventDefault();await handleAuthSubmit(e.target);}
   else if(e.target.id==='tradeForm'){e.preventDefault();await handleTradeFormSubmit(e.target);}
-  else if(e.target.id==='accountForm'){e.preventDefault();await addAccount(document.getElementById('accountName').value,document.getElementById('accountKind').value,document.getElementById('accountBalance').value,false);}
+  else if(e.target.id==='dailyResultForm'){e.preventDefault();await saveDailyResult(e.target);}
+  else if(e.target.id==='accountForm'){e.preventDefault();await addAccount(Object.fromEntries(new FormData(e.target).entries()));}
   else if(e.target.matches('.account-meta-form')){e.preventDefault();await updateAccount(e.target);}
   else if(e.target.id==='goalsForm'){e.preventDefault();await saveGoals(e.target);}
   else if(e.target.id==='weeklyReviewForm'){e.preventDefault();await saveWeeklyReview(e.target);}
@@ -1373,7 +1518,11 @@ document.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.id==='tagInput'){e.preventDefault();addTag(e.target.value);e.target.value='';}
   if(e.key==='Escape'&&modal){closeModal();}
-  if((e.key==='Enter'||e.key===' ')&&e.target.matches('.cal-cell[data-action="open-day"]')){e.preventDefault();openDay(e.target.dataset.date);}
+  if(e.target.matches('.cal-cell[data-action="open-day"]')){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();openDay(e.target.dataset.date);return;}
+    const offset={ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[e.key];
+    if(offset){e.preventDefault();const date=new Date(`${e.target.dataset.date}T00:00:00`);date.setDate(date.getDate()+offset);const next=dstr(date.getFullYear(),date.getMonth(),date.getDate());if(date.getMonth()!==calMonth.getMonth()||date.getFullYear()!==calMonth.getFullYear()){calMonth=new Date(date.getFullYear(),date.getMonth(),1);render();document.querySelector(`.cal-cell[data-date="${next}"]`)?.focus();}else document.querySelector(`.cal-cell[data-date="${next}"]`)?.focus();}
+  }
 });
 document.addEventListener('paste',async e=>{
   if(!modal||modal.mode!=='form'||!e.clipboardData)return;
