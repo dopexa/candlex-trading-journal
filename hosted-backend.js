@@ -71,6 +71,15 @@
     return unwrap(await client.auth.getUser(), 'Please sign in again.')?.user || null;
   }
 
+  function legacyAccountId(name) {
+    let hash = 2166136261;
+    for (const ch of String(name).toLocaleLowerCase()) {
+      hash ^= ch.charCodeAt(0);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `legacy-${(hash >>> 0).toString(36)}`;
+  }
+
   function normalizePreferences(body, userId) {
     const settings = body?.settings || {};
     if (!currencies.includes(settings.currency || 'USD')) throw new Error('Choose a supported currency.');
@@ -98,14 +107,36 @@
       weeklyReviews[key] = normalized;
     }
     if (!Array.isArray(body?.accounts || [])) throw new Error('Trading accounts are not valid.');
-    const accounts = [];
+    const accounts = [], accountIds = new Set(), accountNames = new Set();
     for (const value of (body.accounts || [])) {
-      if (typeof value !== 'string' || !value.trim() || value.trim().length > 80) throw new Error('Trading account names must be 1–80 characters.');
-      const label = value.trim();
-      if (!accounts.some(item => item.toLowerCase() === label.toLowerCase())) accounts.push(label);
+      const legacy = typeof value === 'string';
+      const name = String(legacy ? value : value?.name || '').trim();
+      if (!name || name.length > 80) throw new Error('Trading account names must be 1–80 characters.');
+      const normalizedName = name.toLocaleLowerCase();
+      if (accountNames.has(normalizedName)) throw new Error('Trading account names must be unique.');
+      const id = legacy ? legacyAccountId(name) : String(value?.id || '');
+      if (!/^[a-zA-Z0-9_-]{1,80}$/.test(id) || accountIds.has(id)) throw new Error('Trading account IDs are not valid.');
+      const kind = legacy ? 'personal' : (value?.kind || 'personal');
+      const initialBalance = legacy ? 0 : Number(value?.initialBalance || 0);
+      const accountSize = legacy ? 0 : Number(value?.accountSize || 0);
+      const profitTarget = legacy ? 0 : Number(value?.profitTarget || 0);
+      const maxDrawdown = legacy ? 0 : Number(value?.maxDrawdown || 0);
+      const dailyLossLimit = legacy ? 0 : Number(value?.dailyLossLimit || 0);
+      const firm = legacy ? '' : String(value?.firm || '').trim();
+      const status = legacy ? 'active' : (value?.status || 'active');
+      if (!['personal', 'prop', 'demo'].includes(kind) ||
+        ![initialBalance, accountSize, profitTarget, maxDrawdown, dailyLossLimit].every(number => Number.isFinite(number) && number >= 0 && number <= 1e12) ||
+        firm.length > 120 || !['active','passed','funded','failed','closed'].includes(status)) {
+        throw new Error('Trading account details must be valid.');
+      }
+      accounts.push({ id, name, kind, initialBalance, accountSize, firm, profitTarget, maxDrawdown, dailyLossLimit, status, archived: !legacy && value?.archived === true });
+      accountIds.add(id);
+      accountNames.add(normalizedName);
     }
     if (accounts.length > 100) throw new Error('You can save up to 100 trading accounts.');
-    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
+    const requestedAccountId = typeof settings.activeAccountId === 'string' ? settings.activeAccountId : 'all';
+    const activeAccountId = requestedAccountId === 'all' || accountIds.has(requestedAccountId) ? requestedAccountId : 'all';
+    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', activeAccountId, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
   }
 
   function normalizeTrade(value) {
@@ -135,6 +166,10 @@
       tags: [...new Set(tags.map(tag => tag.trim()))],
       emotions: [...new Set(selectedEmotions)]
     };
+    if (value.accountId != null && value.accountId !== '') {
+      if (typeof value.accountId !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(value.accountId)) throw new Error('Choose a valid trading account.');
+      trade.accountId = value.accountId;
+    }
     for (const field of ['marketConditions','rationale','lessons']) {
       const note = value[field] || '';
       if (typeof note !== 'string' || note.length > 5000) throw new Error('Each note must be 5,000 characters or fewer.');
@@ -142,6 +177,27 @@
     }
     if (typeof value.notes === 'string' && value.notes.trim()) trade.notes = value.notes.trim().slice(0, 5000);
     return trade;
+  }
+
+  function normalizeDailyResult(value, userId) {
+    const accountId = typeof value?.accountId === 'string' ? value.accountId : '';
+    const tradeDate = typeof value?.date === 'string' ? value.date : '';
+    const parsedDate = new Date(`${tradeDate}T00:00:00Z`);
+    const pnl = Number(value?.pnl);
+    const note = value?.note == null ? '' : value.note;
+    if (!/^[A-Za-z0-9_-]{1,80}$/.test(accountId)) throw new Error('Choose a valid trading account.');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(tradeDate) || Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== tradeDate) throw new Error('Choose a valid result date.');
+    if (!Number.isFinite(pnl) || Math.abs(pnl) > 999999999999.99) throw new Error('Enter a valid daily result.');
+    if (typeof note !== 'string' || note.length > 2000) throw new Error('Notes must be 2,000 characters or fewer.');
+    return { user_id: userId, account_id: accountId, trade_date: tradeDate, pnl, note: note.trim() };
+  }
+
+  async function assertOwnAccount(accountId, userId) {
+    const row = unwrap(await client.from('user_preferences').select('accounts').eq('user_id', userId).maybeSingle(), 'Could not verify the trading account.');
+    const accounts = Array.isArray(row?.accounts) ? row.accounts : [];
+    if (!accounts.some(value => (typeof value === 'string' ? legacyAccountId(value.trim()) : value?.id) === accountId)) {
+      throw new Error('Choose one of your trading accounts.');
+    }
   }
 
   function decodeImage(image) {
@@ -290,7 +346,8 @@
     return {
       trades: tradeRows.map(row => toTrade(row, imageLists.get(row.id) || [])),
       settings: preferences.settings || { currency: 'USD', theme: 'dark' },
-      accounts: Array.isArray(preferences.accounts) ? preferences.accounts : []
+      accounts: Array.isArray(preferences.accounts) ? preferences.accounts : [],
+      dailyResults: unwrap(await client.from('daily_results').select('id,account_id,trade_date,pnl,note,created_at,updated_at').eq('user_id', userId).order('trade_date', { ascending: true }), 'Could not load daily results.') || []
     };
   }
 
@@ -326,6 +383,13 @@
     const user = await currentUser();
     if (!user) throw new Error('Your session expired. Sign in again to continue.');
     if (route === '/api/data' && method === 'GET') return loadData(user.id);
+    if (route === '/api/daily-results' && method === 'POST') {
+      const result = normalizeDailyResult(body, user.id);
+      await assertOwnAccount(result.account_id, user.id);
+      const saved = unwrap(await client.from('daily_results').upsert(result, { onConflict: 'user_id,account_id,trade_date' })
+        .select('id,account_id,trade_date,pnl,note,created_at,updated_at').single(), 'Could not save the daily result.');
+      return { dailyResult: saved };
+    }
     if (route === '/api/settings' && method === 'PUT') {
       const record = normalizePreferences(body, user.id);
       const saved = unwrap(await client.from('user_preferences').upsert(record).select('settings,accounts').single(), 'Could not save your settings.');
