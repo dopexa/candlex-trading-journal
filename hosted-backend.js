@@ -136,7 +136,7 @@
     if (accounts.length > 100) throw new Error('You can save up to 100 trading accounts.');
     const requestedAccountId = typeof settings.activeAccountId === 'string' ? settings.activeAccountId : 'all';
     const activeAccountId = requestedAccountId === 'all' || accountIds.has(requestedAccountId) ? requestedAccountId : 'all';
-    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', activeAccountId, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
+    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', activeAccountId, backgroundAnimation: settings.backgroundAnimation !== false, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
   }
 
   function normalizeTrade(value) {
@@ -170,12 +170,6 @@
       if (typeof value.accountId !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(value.accountId)) throw new Error('Choose a valid trading account.');
       trade.accountId = value.accountId;
     }
-    for (const field of ['marketConditions','rationale','lessons']) {
-      const note = value[field] || '';
-      if (typeof note !== 'string' || note.length > 5000) throw new Error('Each note must be 5,000 characters or fewer.');
-      trade[field] = note.trim();
-    }
-    if (typeof value.notes === 'string' && value.notes.trim()) trade.notes = value.notes.trim().slice(0, 5000);
     return trade;
   }
 
@@ -294,6 +288,12 @@
       }
     }
 
+    const existingRow = unwrap(await client.from('trades').select('trade_data').eq('id', tradeId).eq('user_id', userId).single(), 'Trade not found.');
+    const preservedLegacyFields = {};
+    for (const field of ['marketConditions','rationale','lessons','notes']) {
+      if (Object.prototype.hasOwnProperty.call(existingRow.trade_data || {}, field)) preservedLegacyFields[field] = existingRow.trade_data[field];
+    }
+    const tradeUpdate = { ...trade, ...preservedLegacyFields };
     const existing = await ownedTradeImages(tradeId, userId);
     const existingIds = new Set(existing.map(item => item.id));
     const keep = new Set(keepIds);
@@ -306,7 +306,7 @@
     let added = [];
     try {
       added = await insertImages(userId, tradeId, images);
-      unwrap(await client.from('trades').update({ trade_date: trade.date, trade_data: trade })
+      unwrap(await client.from('trades').update({ trade_date: trade.date, trade_data: tradeUpdate })
         .eq('id', tradeId).eq('user_id', userId).select('id').single(), 'Could not update the trade.');
     } catch (error) {
       if (added.length) {

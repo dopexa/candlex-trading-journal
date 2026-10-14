@@ -23,3 +23,9 @@ No database password or real user data belongs in this repository. Do not run th
 ## Add daily results to an existing project
 
 Run [`migration-20261014-daily-results.sql`](migration-20261014-daily-results.sql) in the existing project's SQL Editor. It only adds the `daily_results` table, its owner-only RLS policy, update trigger, and monthly summary view. It does not replace existing accounts or trade records. The browser API checks that a result references one of the signed-in user's saved accounts.
+
+## CandleX v2 client update
+
+The account and calendar experience uses the existing `user_preferences.accounts` JSONB array and `daily_results` table. The animation preference is stored in the existing `user_preferences.settings` JSONB object. This update does not require a database migration, new account table, or account ID conversion.
+
+The starter `migration.sql` from the v2 specification is not compatible with this project's existing account model: it creates a separate UUID-based `prop_accounts` table and expects `daily_results.account_id` to reference it. Do not run that starter migration against this project. Legacy trade review fields remain in existing `trade_data` JSONB records and are preserved during trade edits, while the updated UI no longer shows them.
