@@ -1,0 +1,38 @@
+.cx-logo3d {
+  --cx-logo-sway: var(--cx-logo-sway-large);
+  --cx-logo-sway-negative: var(--cx-logo-sway-large-negative);
+  --cx-logo-size: var(--cx-logo-size-large);
+  display: inline-grid;
+  justify-items: center;
+  width: var(--cx-logo-size);
+  max-width: 100%;
+  perspective: var(--cx-logo-perspective);
+  color: var(--cx-wordmark);
+  text-decoration: none;
+}
+.cx-logo3d__tilt { display: block; width: 100%; transform-style: preserve-3d; transform: rotateX(var(--cx-logo-rx, var(--cx-angle-zero))) rotateY(var(--cx-logo-ry, var(--cx-angle-zero))); transition: transform var(--cx-logo-tilt-duration) var(--cx-ease-out); }
+.cx-logo3d__stage { position: relative; display: block; width: 100%; aspect-ratio: 400 / 332; transform-style: preserve-3d; animation: cx-logo-sway var(--cx-logo-sway-duration) var(--cx-ease-inout) var(--cx-logo-enter-duration) infinite alternate; }
+.cx-logo3d__layer { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; transform: translateZ(var(--cx-logo-z)); transition: transform var(--cx-logo-layer-duration) var(--cx-ease-out); animation: cx-logo-enter var(--cx-logo-enter-duration) var(--cx-ease-out) var(--cx-logo-delay) both; }
+.cx-logo3d__layer--disc { --cx-logo-z: var(--cx-logo-z-disc); --cx-logo-z-hover: var(--cx-logo-z-disc-hover); --cx-logo-delay: var(--cx-dur-instant); --cx-logo-fly-x: var(--cx-length-zero); --cx-logo-fly-y: var(--cx-length-zero); }
+.cx-logo3d__layer--band { --cx-logo-z: var(--cx-logo-z-band); --cx-logo-z-hover: var(--cx-logo-z-band-hover); --cx-logo-delay: var(--cx-logo-enter-stagger); --cx-logo-fly-x: var(--cx-logo-fly-x-neg); --cx-logo-fly-y: var(--cx-logo-fly-18-neg); filter: var(--cx-logo-shadow); }
+.cx-logo3d__layer--purple { --cx-logo-z: var(--cx-length-zero); --cx-logo-z-hover: var(--cx-length-zero); --cx-logo-delay: calc(var(--cx-logo-enter-stagger) + var(--cx-logo-enter-stagger)); --cx-logo-fly-x: var(--cx-logo-fly-x-pos); --cx-logo-fly-y: var(--cx-logo-fly-22-pos); filter: var(--cx-logo-glow); }
+.cx-logo3d__layer--blade { --cx-logo-z: var(--cx-logo-z-front); --cx-logo-z-hover: var(--cx-logo-z-front-hover); --cx-logo-delay: calc(var(--cx-logo-enter-stagger) + var(--cx-logo-enter-stagger) + var(--cx-logo-enter-stagger)); --cx-logo-fly-x: var(--cx-logo-fly-x-neg); --cx-logo-fly-y: var(--cx-logo-fly-26-pos); filter: var(--cx-logo-shadow); }
+.cx-logo3d:hover .cx-logo3d__layer { transform: translateZ(var(--cx-logo-z-hover)); }
+.cx-logo3d__word { display: flex; justify-content: center; margin-top: var(--cx-logo-word-gap); color: var(--cx-wordmark); font: 300 var(--cx-logo-word-large)/1 var(--cx-font-logo); letter-spacing: var(--cx-tracking-brand); white-space: nowrap; }
+.cx-logo3d__word b { color: var(--cx-accent); font-weight: 700; }
+.cx-logo3d--row { --cx-logo-sway: var(--cx-logo-sway-row); --cx-logo-sway-negative: var(--cx-logo-sway-row-negative); --cx-logo-size: var(--cx-logo-size-row); display: flex; align-items: center; justify-items: initial; gap: var(--cx-space-3); width: auto; }
+.cx-logo3d--row .cx-logo3d__tilt { flex: none; width: var(--cx-logo-size); }
+.cx-logo3d--row .cx-logo3d__word { margin: 0; font-size: var(--cx-logo-word-row); }
+.cx-logo3d--auth { --cx-logo-size: var(--cx-logo-size-auth); }
+.cx-logo3d--auth .cx-logo3d__word { margin-top: var(--cx-space-2); font-size: var(--cx-logo-word-auth); }
+.cx-logo3d--large .cx-logo3d__word { font-size: var(--cx-logo-word-large); }
+@keyframes cx-logo-sway { from { transform: rotateY(var(--cx-logo-sway-negative)) rotateX(var(--cx-logo-tilt-y-negative)); } to { transform: rotateY(var(--cx-logo-sway)) rotateX(var(--cx-logo-tilt-y)); } }
+@keyframes cx-logo-enter { from { opacity: 0; transform: translate3d(var(--cx-logo-fly-x), var(--cx-logo-fly-y), var(--cx-logo-enter-depth)); } to { opacity: 1; transform: translateZ(var(--cx-logo-z)); } }
+.sidebar-collapsed .cx-logo3d--row .cx-logo3d__word { display: none; }
+.auth-story-brand { display: flex; justify-content: flex-start; }
+.dashboard-empty .cx-logo3d { margin-bottom: var(--cx-space-4); }
+@media (prefers-reduced-motion: reduce) {
+  .cx-logo3d__stage, .cx-logo3d__layer { animation: none; }
+  .cx-logo3d__tilt, .cx-logo3d__layer { transition: none; }
+  .cx-logo3d:hover .cx-logo3d__layer { transform: translateZ(var(--cx-logo-z)); }
+}
