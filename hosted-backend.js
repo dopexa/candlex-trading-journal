@@ -54,7 +54,8 @@
   }
 
   function toTrade(row, images) {
-    return { ...row.trade_data, id: row.id, date: row.trade_date, images };
+    const thumbnails = Array.isArray(row.trade_data?.imageThumbnails) ? row.trade_data.imageThumbnails : [];
+    return { ...row.trade_data, id: row.id, date: row.trade_date, images: images.map((image, index) => ({ ...image, thumbnail: thumbnails[index] || null })) };
   }
 
   async function fetchTrade(tradeId, userId) {
@@ -83,7 +84,6 @@
   function normalizePreferences(body, userId) {
     const settings = body?.settings || {};
     if (!currencies.includes(settings.currency || 'USD')) throw new Error('Choose a supported currency.');
-    if (!['dark','light'].includes(settings.theme || 'dark')) throw new Error('Choose a supported theme.');
     const sourceGoals = settings.goals || {};
     const dailyLossLimit = Number(sourceGoals.dailyLossLimit || 0);
     const weeklyProfitTarget = Number(sourceGoals.weeklyProfitTarget || 0);
@@ -124,19 +124,59 @@
       const dailyLossLimit = legacy ? 0 : Number(value?.dailyLossLimit || 0);
       const firm = legacy ? '' : String(value?.firm || '').trim();
       const status = legacy ? 'active' : (value?.status || 'active');
+      const currency = legacy ? (settings.currency || 'USD') : (value?.currency || settings.currency || 'USD');
+      const phase = legacy ? 'phase1' : (value?.phase || 'phase1');
+      const drawdownType = legacy ? 'static' : (value?.drawdownType || 'static');
+      const minTradingDays = legacy ? 0 : Number(value?.minTradingDays || 0);
+      const optionalRule = field => {
+        if (legacy || value?.[field] == null || value?.[field] === '') return null;
+        const number = Number(value[field]);
+        return Number.isFinite(number) ? number : NaN;
+      };
+      const minDayProfit = optionalRule('minDayProfit');
+      const consistencyPct = optionalRule('consistencyPct');
+      const profitSplitPct = optionalRule('profitSplitPct');
       if (!['personal', 'prop', 'demo'].includes(kind) ||
         ![initialBalance, accountSize, profitTarget, maxDrawdown, dailyLossLimit].every(number => Number.isFinite(number) && number >= 0 && number <= 1e12) ||
-        firm.length > 120 || !['active','passed','funded','failed','closed'].includes(status)) {
+        firm.length > 120 || !['active','passed','funded','failed','closed'].includes(status) ||
+        !currencies.includes(currency) || !['phase1','phase2','funded'].includes(phase) ||
+        !['static','trailing_eod','trailing_intraday'].includes(drawdownType) ||
+        !Number.isInteger(minTradingDays) || minTradingDays < 0 || minTradingDays > 365 ||
+        (minDayProfit !== null && (!Number.isFinite(minDayProfit) || minDayProfit < 0 || minDayProfit > 1e12)) ||
+        (consistencyPct !== null && (!Number.isFinite(consistencyPct) || consistencyPct <= 0 || consistencyPct > 100)) ||
+        (profitSplitPct !== null && (!Number.isFinite(profitSplitPct) || profitSplitPct < 0 || profitSplitPct > 100))) {
         throw new Error('Trading account details must be valid.');
       }
-      accounts.push({ id, name, kind, initialBalance, accountSize, firm, profitTarget, maxDrawdown, dailyLossLimit, status, archived: !legacy && value?.archived === true });
+      accounts.push({ id, name, kind, initialBalance, accountSize, firm, profitTarget, maxDrawdown, dailyLossLimit, status, archived: !legacy && value?.archived === true, currency, phase, drawdownType, drawdownLocksAtStart: !legacy && value?.drawdownLocksAtStart === true, minTradingDays, minDayProfit, consistencyPct, profitSplitPct });
       accountIds.add(id);
       accountNames.add(normalizedName);
     }
     if (accounts.length > 100) throw new Error('You can save up to 100 trading accounts.');
+    const normalizeFinanceEvents = (source, kind) => {
+      if (!Array.isArray(source || [])) throw new Error('Fees and payouts must be valid lists.');
+      const allowedFeeKinds = ['challenge','reset','activation','data','other'];
+      const events = (source || []).slice(-1000).map(value => {
+        const date = String(value?.date || '');
+        const amount = Number(value?.amount);
+        const accountId = String(value?.accountId || '');
+        const eventKind = kind === 'fee' ? String(value?.kind || 'other') : 'payout';
+        const note = typeof value?.note === 'string' ? value.note.trim() : '';
+        const parsed = new Date(`${date}T00:00:00Z`);
+        if (!/^[a-zA-Z0-9_-]{1,80}$/.test(String(value?.id || '')) || !accountIds.has(accountId) ||
+          !Number.isFinite(amount) || amount <= 0 || amount > 1e12 ||
+          !/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0,10) !== date ||
+          note.length > 240 || (kind === 'fee' && !allowedFeeKinds.includes(eventKind))) {
+          throw new Error('Fee or payout details are not valid.');
+        }
+        return { id: String(value.id), accountId, kind: eventKind, amount, date, note };
+      });
+      return events;
+    };
+    const accountFees = normalizeFinanceEvents(settings.accountFees, 'fee');
+    const payouts = normalizeFinanceEvents(settings.payouts, 'payout');
     const requestedAccountId = typeof settings.activeAccountId === 'string' ? settings.activeAccountId : 'all';
     const activeAccountId = requestedAccountId === 'all' || accountIds.has(requestedAccountId) ? requestedAccountId : 'all';
-    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: settings.theme || 'dark', activeAccountId, backgroundAnimation: settings.backgroundAnimation !== false, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews }, accounts };
+    return { user_id: userId, settings: { currency: settings.currency || 'USD', theme: 'dark', activeAccountId, backgroundAnimation: settings.backgroundAnimation !== false, goals: { dailyLossLimit, weeklyProfitTarget, weeklyTradeTarget }, weeklyReviews, accountFees, payouts }, accounts };
   }
 
   function normalizeTrade(value) {
@@ -147,9 +187,16 @@
     const instrument = typeof value.instrument === 'string' ? value.instrument.trim() : '';
     const account = typeof value.account === 'string' ? value.account.trim() : '';
     const amount = Number(value.amount);
+    const time = value.time == null || value.time === '' ? null : String(value.time);
+    const price = field => value[field] == null || value[field] === '' ? null : Number(value[field]);
+    const entryPrice = price('entryPrice'), exitPrice = price('exitPrice');
     if (!instrument || instrument.length > 64) throw new Error('Enter an instrument name up to 64 characters.');
     if (!account || account.length > 80) throw new Error('Choose a trading account.');
     if (!Number.isFinite(amount) || amount <= 0) throw new Error('Enter a trade amount greater than zero.');
+    if ((time !== null && !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) ||
+      [entryPrice, exitPrice].some(number => number !== null && (!Number.isFinite(number) || number < 0 || number > 1e12))) {
+      throw new Error('Trade time and entry/exit prices must be valid.');
+    }
     if (!['long','short'].includes(value.dir)) throw new Error('Choose a valid trade direction.');
     if (!['profit','loss'].includes(value.result)) throw new Error('Choose a valid trade result.');
     const tags = value.tags || [];
@@ -162,10 +209,18 @@
       dir: value.dir,
       result: value.result,
       amount,
+      time,
+      entryPrice,
+      exitPrice,
       account,
       tags: [...new Set(tags.map(tag => tag.trim()))],
       emotions: [...new Set(selectedEmotions)]
     };
+    const thumbnails = value.imageThumbnails == null ? [] : value.imageThumbnails;
+    if (!Array.isArray(thumbnails) || thumbnails.length > maxImages || thumbnails.some(item => item !== null && item !== '' && (typeof item !== 'string' || item.length > 524288 || !/^data:image\/webp;base64,[A-Za-z0-9+/]+={0,2}$/.test(item)))) {
+      throw new Error('Screenshot thumbnails are not valid.');
+    }
+    if (thumbnails.length) trade.imageThumbnails = thumbnails.map(item => item || null);
     if (value.accountId != null && value.accountId !== '') {
       if (typeof value.accountId !== 'string' || !/^[a-zA-Z0-9_-]{1,80}$/.test(value.accountId)) throw new Error('Choose a valid trading account.');
       trade.accountId = value.accountId;
@@ -274,6 +329,7 @@
     const keepIds = tradeId ? body?.keepImageIds : [];
     if (!Array.isArray(keepIds) || keepIds.some(id => typeof id !== 'string') || new Set(keepIds).size !== keepIds.length) throw new Error('Screenshot data is not valid.');
     if (images.length + keepIds.length > maxImages) throw new Error('A trade can have up to 5 screenshots.');
+    if (trade.imageThumbnails && trade.imageThumbnails.length !== images.length + keepIds.length) throw new Error('Screenshot thumbnails do not match the selected images.');
 
     if (!tradeId) {
       if (images.length > maxImages) throw new Error('A trade can have up to 5 screenshots.');
